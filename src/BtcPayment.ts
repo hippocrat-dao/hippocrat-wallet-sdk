@@ -80,7 +80,7 @@ class BtcPayment {
           new Error('No UTXO found for valid transaction'));
         // creation of psbt
         const psbt : bitcoin.Psbt = new bitcoin.Psbt({ 
-          network: bitcoin.networks.testnet as bitcoin.networks.Network });
+          network: signer.payment.network as bitcoin.networks.Network });
         // add optimized input & ouput UTXO
         selectedUTXO.inputs.forEach((input : any) =>
           psbt.addInput({
