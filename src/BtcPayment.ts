@@ -4,7 +4,8 @@ import * as ecc from 'tiny-secp256k1';
 import * as wif from 'wif';
 import BtcRpcNode from './BtcRpcNode.js';
 import coinSelect from 'coinselect';
-import BtcSigner from './models/btcSigner.js';
+import BtcSigner from './models/BtcSigner.js';
+import BtcReceiver from './models/BtcReceiver.js';
 
 class BtcPayment {
     // Account to pay transaction
@@ -29,16 +30,19 @@ class BtcPayment {
         };
     }
     static registerDid = async (signer : BtcSigner, 
-      toAddress : string, didmsg : string) 
+      toAddressList : string[], didmsg : string) 
     : Promise<string> => {
         // signerUTXO to spend
         const signerUTXOList : any = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
         // didOwnerList
-        const target : [{address: string, value: number}] = [{address: toAddress, value: 1}];
+        let receiverList : BtcReceiver[] = [];
+        toAddressList.forEach(toAddress => {
+          receiverList.push({address: toAddress, value: 1})
+        });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, target, signerUTXOList);
+          signer, receiverList, signerUTXOList);
         // data to store for did
         const data : Buffer = Buffer.from(didmsg, 'utf8');
         const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
@@ -53,26 +57,20 @@ class BtcPayment {
     }
     // segWitTransfer support 
     static segWitTransfer = async (signer : BtcSigner, 
-      toAddress : string, transferAmount : number) 
+      receiverList : BtcReceiver[]) 
     : Promise<string> => {
         // signerUTXO to spend
         const signerUTXOList : any = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
-        // target toAddress & value list
-        const target : [{address: string, value: number}] = [{address: toAddress, value: transferAmount}];
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, target, signerUTXOList);
+          signer, receiverList, signerUTXOList);
         // sign and broadcast tx
         return await this._signAndBroadcastTx(signer, psbt);
     }
     // helper method to select UTXO and fee
     private static _utxoOptimizer = async(
-      signer : BtcSigner, 
-      target : [{
-        address: string,
-        value: number
-      }], signerUTXOList : any)
+      signer : BtcSigner, target : BtcReceiver[], signerUTXOList : any)
     : Promise<bitcoin.Psbt> => {
         const feeRate : number = 55; // satoshis per byte
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
