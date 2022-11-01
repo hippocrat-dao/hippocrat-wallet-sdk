@@ -41,7 +41,7 @@ class BtcPayment {
         // didOwnerList
         const target : [{address: string, value: number}] = [{address: toAddress, value: 1}];
         const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
-          network: bitcoin.networks.testnet as bitcoin.networks.Network })
+          network: bitcoin.networks.testnet as bitcoin.networks.Network });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
           signer, target, signerUTXOList, psbtInput);
@@ -64,40 +64,17 @@ class BtcPayment {
     }, toAddress : string, transferAmount : number) 
     : Promise<string> => {
         // signerUTXO to spend
-        const signerUTXO : any = await BtcRpcNode.getUTXOLatest(
+        const signerUTXOList : any = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
-        const inputUTXO : any = {
-            hash: signerUTXO.txid as string, // txId
-            index: signerUTXO.vout as number, // output number of above tx hash
-            witnessUtxo: {
-              script: signer.payment.output as Buffer, // scriptPubKey
-              value: signerUTXO.value as number, // UTXO amount
-            },
-        };
-        const minerFee : number = 1000;
-        const signerAmount : number = inputUTXO.witnessUtxo.value - (minerFee+transferAmount);
-        
-        const psbt : bitcoin.Psbt = new bitcoin.Psbt({ network: bitcoin.networks.testnet })
-          .addInput(inputUTXO as bitcoin.PsbtTxInput)
-          // signerUTXO
-          .addOutput({
-            address: signer.payment.address as string,
-            value: signerAmount as number,
-          } as bitcoin.PsbtTxOutput)
-          // receiverUTXO
-          .addOutput({
-            address: toAddress as string,
-            value: transferAmount as number,
-          } as bitcoin.PsbtTxOutput)
-          .signInput(
-            0 as number,
-            signer.keyPair as ecPair.ECPairInterface);
-
-        psbt.finalizeAllInputs() as bitcoin.Psbt;
-
-        const tx : bitcoin.Transaction = psbt.extractTransaction();
-
-        return await BtcRpcNode.broadcastTx(tx.toHex() as string) as string;
+        // target toAddress & value list
+        const target : [{address: string, value: number}] = [{address: toAddress, value: transferAmount}];
+        const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
+          network: bitcoin.networks.testnet as bitcoin.networks.Network });
+        // get optimized transaction  
+        const psbt : bitcoin.Psbt = await this._utxoOptimizer(
+          signer, target, signerUTXOList, psbtInput);
+        // sign and broadcast tx
+        return await this._signAndBroadcastTx(signer, psbt);
     }
     // helper method to select UTXO and fee
     private static _utxoOptimizer = async(
@@ -118,8 +95,8 @@ class BtcPayment {
         // add optimized input & ouput UTXO
         selectedUTXO.inputs.forEach((input : any) =>
           psbt.addInput({
-            hash: input.txid as string | Buffer,
-            index: input.vout as number,
+            hash: input.txid as string | Buffer, // tx id
+            index: input.vout as number, // output number of above tx hash
             witnessUtxo: {
               script: signer.payment.output as Buffer, // scriptPubKey
               value: input.value as number, // UTXO amount
