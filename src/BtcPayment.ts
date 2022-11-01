@@ -6,6 +6,7 @@ import BtcRpcNode from './BtcRpcNode.js';
 import coinSelect from 'coinselect';
 import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';
+import UTXO from './models/UTXO.js';
 
 class BtcPayment {
     // Account to pay transaction
@@ -29,11 +30,11 @@ class BtcPayment {
             keyPair
         };
     }
-    static registerDid = async (signer : BtcSigner, 
-      toAddressList : string[], didmsg : string) 
+    static registerDid = async (
+      signer : BtcSigner, toAddressList : string[], didmsg : string) 
     : Promise<string> => {
         // signerUTXO to spend
-        const signerUTXOList : any = await BtcRpcNode.getUTXOList(
+        const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
         // didOwnerList
         let receiverList : BtcReceiver[] = [];
@@ -56,11 +57,11 @@ class BtcPayment {
         return await this._signAndBroadcastTx(signer, psbt);
     }
     // segWitTransfer support 
-    static segWitTransfer = async (signer : BtcSigner, 
-      receiverList : BtcReceiver[]) 
+    static segWitTransfer = async (
+      signer : BtcSigner, receiverList : BtcReceiver[]) 
     : Promise<string> => {
         // signerUTXO to spend
-        const signerUTXOList : any = await BtcRpcNode.getUTXOList(
+        const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
@@ -70,7 +71,7 @@ class BtcPayment {
     }
     // helper method to select UTXO and fee
     private static _utxoOptimizer = async(
-      signer : BtcSigner, target : BtcReceiver[], signerUTXOList : any)
+      signer : BtcSigner, target : BtcReceiver[], signerUTXOList : UTXO[])
     : Promise<bitcoin.Psbt> => {
         const feeRate : number = 55; // satoshis per byte
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);

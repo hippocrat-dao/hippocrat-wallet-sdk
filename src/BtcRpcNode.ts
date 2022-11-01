@@ -1,13 +1,14 @@
 import request from 'request';
+import UTXO from './models/UTXO';
 // later in env
 const rpcNodeUrlTest : string = "https://blockstream.info/testnet/api/"
 
 class BtcRpcNode {
     // get single latest utxo of address
     static getUTXOLatest = async (address : string) 
-    : Promise<JSON> => {
+    : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
-        return new Promise<JSON>((resolve, reject) => request({
+        return new Promise<UTXO>((resolve, reject) => request({
             url: rpcNodeUrlTest + path as string,
             method: 'GET' as string,
             forever: true as boolean
@@ -16,15 +17,15 @@ class BtcRpcNode {
                 err? 
                 reject(err) as void : 
                 resolve(
-                    JSON.parse(res.body as string)[0] as JSON
+                    JSON.parse(res.body as string)[0] as UTXO
                     ) as void;
             }))
     }
     // get utxo list of address
     static getUTXOList = async (address : string) 
-    : Promise<JSON> => {
+    : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
-        return new Promise<JSON>((resolve, reject) => request({
+        return new Promise<UTXO[]>((resolve, reject) => request({
             url: rpcNodeUrlTest + path as string,
             method: 'GET' as string,
             forever: true as boolean
@@ -33,7 +34,7 @@ class BtcRpcNode {
                 err? 
                 reject(err) as void : 
                 resolve(
-                    JSON.parse(res.body as string) as JSON
+                    JSON.parse(res.body as string) as UTXO[]
                     ) as void;
             }))
     }
