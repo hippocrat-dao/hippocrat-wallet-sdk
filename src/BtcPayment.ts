@@ -38,30 +38,24 @@ class BtcPayment {
         // signerUTXO to spend
         const signerUTXOList : any = await BtcRpcNode.getUTXOList(
           signer.payment.address as string);
-        // data to store
+        // didOwnerList
+        const target : [{address: string, value: number}] = [{address: toAddress, value: 1}];
+        const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
+          network: bitcoin.networks.testnet as bitcoin.networks.Network })
+        // get optimized transaction  
+        const psbt : bitcoin.Psbt = await this._utxoOptimizer(
+          signer, target, signerUTXOList, psbtInput);
+        // data to store for did
         const data : Buffer = Buffer.from(didmsg, 'utf8');
         const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
           { data: [data] as Buffer[] });
-        const target : [{address: string, value: number}] = [{address: toAddress, value: 1}];
-        const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
-          network: bitcoin.networks.testnet as bitcoin.networks.Network })  
-        const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, target, signerUTXOList, psbtInput);
-        // OP_RETURN(hipocrat did registry)
+        // add OP_RETURN(hipocrat did registry)
         psbt.addOutput({
           script: embed.output as Buffer,
           value: 0 as number
         } as bitcoin.PsbtTxOutput)
-        .signInput(
-          0 as number,
-          signer.keyPair as ecPair.ECPairInterface
-        );
-
-        psbt.finalizeAllInputs() as bitcoin.Psbt;
-
-        const tx : bitcoin.Transaction = psbt.extractTransaction();
-
-        return await BtcRpcNode.broadcastTx(tx.toHex() as string) as string;
+        // sign and broadcast tx
+        return await this._signAndBroadcastTx(signer, psbt);
     }
     // segWitTransfer support 
     static segWitTransfer = async (signer : {
@@ -144,6 +138,25 @@ class BtcPayment {
           } as bitcoin.PsbtTxOutput)
         })        
         return psbt;
+    }
+    // helper method to sign and broadcast tx
+    private static _signAndBroadcastTx = async(
+      signer : {
+        payment: bitcoin.payments.Payment,
+        keyPair: ecPair.ECPairInterface
+      },
+      psbt : bitcoin.Psbt)
+    : Promise<string> => {
+      psbt.signInput(
+        0 as number,
+        signer.keyPair as ecPair.ECPairInterface
+      );
+
+      psbt.finalizeAllInputs() as bitcoin.Psbt;
+
+      const tx : bitcoin.Transaction = psbt.extractTransaction();
+
+      return await BtcRpcNode.broadcastTx(tx.toHex() as string) as string;
     }
 }
 
