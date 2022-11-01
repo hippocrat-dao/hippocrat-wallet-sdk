@@ -4,14 +4,12 @@ import * as ecc from 'tiny-secp256k1';
 import * as wif from 'wif';
 import BtcRpcNode from './BtcRpcNode.js';
 import coinSelect from 'coinselect';
+import BtcSigner from './models/btcSigner.js';
 
 class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (privateKey : Buffer)
-    : Promise<{
-      payment: bitcoin.payments.Payment,
-      keyPair: ecPair.ECPairInterface
-    }> => {
+    : Promise<BtcSigner> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
         const wifEncodedKey : string = wif.encode(128 as number, 
@@ -30,10 +28,8 @@ class BtcPayment {
             keyPair
         };
     }
-    static registerDid = async (signer : {
-      payment: bitcoin.payments.Payment,
-      keyPair: ecPair.ECPairInterface
-    }, toAddress : string, didmsg : string) 
+    static registerDid = async (signer : BtcSigner, 
+      toAddress : string, didmsg : string) 
     : Promise<string> => {
         // signerUTXO to spend
         const signerUTXOList : any = await BtcRpcNode.getUTXOList(
@@ -56,10 +52,8 @@ class BtcPayment {
         return await this._signAndBroadcastTx(signer, psbt);
     }
     // segWitTransfer support 
-    static segWitTransfer = async (signer : {
-      payment: bitcoin.payments.Payment,
-      keyPair: ecPair.ECPairInterface
-    }, toAddress : string, transferAmount : number) 
+    static segWitTransfer = async (signer : BtcSigner, 
+      toAddress : string, transferAmount : number) 
     : Promise<string> => {
         // signerUTXO to spend
         const signerUTXOList : any = await BtcRpcNode.getUTXOList(
@@ -74,10 +68,7 @@ class BtcPayment {
     }
     // helper method to select UTXO and fee
     private static _utxoOptimizer = async(
-      signer : {
-        payment: bitcoin.payments.Payment,
-        keyPair: ecPair.ECPairInterface
-      }, 
+      signer : BtcSigner, 
       target : [{
         address: string,
         value: number
@@ -117,10 +108,7 @@ class BtcPayment {
     }
     // helper method to sign and broadcast tx
     private static _signAndBroadcastTx = async(
-      signer : {
-        payment: bitcoin.payments.Payment,
-        keyPair: ecPair.ECPairInterface
-      },
+      signer : BtcSigner,
       psbt : bitcoin.Psbt)
     : Promise<string> => {
       psbt.signInput(
