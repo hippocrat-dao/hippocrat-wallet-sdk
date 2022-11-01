@@ -40,11 +40,9 @@ class BtcPayment {
           signer.payment.address as string);
         // didOwnerList
         const target : [{address: string, value: number}] = [{address: toAddress, value: 1}];
-        const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
-          network: bitcoin.networks.testnet as bitcoin.networks.Network });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, target, signerUTXOList, psbtInput);
+          signer, target, signerUTXOList);
         // data to store for did
         const data : Buffer = Buffer.from(didmsg, 'utf8');
         const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
@@ -68,11 +66,9 @@ class BtcPayment {
           signer.payment.address as string);
         // target toAddress & value list
         const target : [{address: string, value: number}] = [{address: toAddress, value: transferAmount}];
-        const psbtInput : bitcoin.Psbt = new bitcoin.Psbt({ 
-          network: bitcoin.networks.testnet as bitcoin.networks.Network });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, target, signerUTXOList, psbtInput);
+          signer, target, signerUTXOList);
         // sign and broadcast tx
         return await this._signAndBroadcastTx(signer, psbt);
     }
@@ -85,13 +81,16 @@ class BtcPayment {
       target : [{
         address: string,
         value: number
-      }], signerUTXOList : any, psbt : bitcoin.Psbt)
+      }], signerUTXOList : any)
     : Promise<bitcoin.Psbt> => {
         const feeRate : number = 55; // satoshis per byte
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
         // .inputs and .outputs will be undefined if no solution was found
         if (!selectedUTXO.inputs || !selectedUTXO.outputs) return Promise.reject(
           new Error('No UTXO found for valid transaction'));
+        // creation of psbt
+        const psbt : bitcoin.Psbt = new bitcoin.Psbt({ 
+          network: bitcoin.networks.testnet as bitcoin.networks.Network });
         // add optimized input & ouput UTXO
         selectedUTXO.inputs.forEach((input : any) =>
           psbt.addInput({
