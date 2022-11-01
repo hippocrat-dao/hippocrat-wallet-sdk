@@ -1,7 +1,8 @@
 import request from 'request';
 import UTXO from './models/UTXO';
-// later in env
-const rpcNodeUrlTest : string = "https://blockstream.info/testnet/api/"
+import BtcRpcUrl from './enums/BtcRpcUrl.js';
+
+const url = BtcRpcUrl.Testnet;
 
 class BtcRpcNode {
     // get single latest utxo of address
@@ -9,7 +10,7 @@ class BtcRpcNode {
     : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO>((resolve, reject) => request({
-            url: rpcNodeUrlTest + path as string,
+            url: url + path as string,
             method: 'GET' as string,
             forever: true as boolean
             },
@@ -26,7 +27,7 @@ class BtcRpcNode {
     : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO[]>((resolve, reject) => request({
-            url: rpcNodeUrlTest + path as string,
+            url: url + path as string,
             method: 'GET' as string,
             forever: true as boolean
             },
@@ -43,7 +44,7 @@ class BtcRpcNode {
     : Promise<string> => {
         const path : string = "tx" ;
         return new Promise<string>((resolve, reject) => request({
-            url: rpcNodeUrlTest + path as string,
+            url: url + path as string,
             method: 'POST' as string,
             body : txHex as string,
             forever: true as boolean
