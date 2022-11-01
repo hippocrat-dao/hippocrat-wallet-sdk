@@ -30,7 +30,7 @@ class BtcPayment {
             keyPair
         };
     }
-    static createDid = async (signer : {
+    static registerDid = async (signer : {
       payment: bitcoin.payments.Payment,
       keyPair: ecPair.ECPairInterface
     }, toAddress : string, didmsg : string) 
