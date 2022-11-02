@@ -4,10 +4,10 @@
     "target": "esNext",
     "module": "esNext",
     "strict": true,
-    "noUnusedLocals": true,                /* 사용되지 않은 지역 변수에 대한 에러보고 여부 */
-    "noUnusedParameters": true,            /* 사용되지 않은 파라미터에 대한 에러보고 여부 */
-    "noImplicitReturns": true,             /* 함수에서 코드의 모든 경로가 값을 반환하지 않을 시 에러보고 여부 */
-    "noFallthroughCasesInSwitch": true,    /* switch문에서 fallthrough 케이스에 대한 에러보고 여부 */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,    
+    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
