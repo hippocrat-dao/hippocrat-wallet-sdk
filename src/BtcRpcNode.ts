@@ -2,7 +2,7 @@ import request from 'request';
 import UTXO from './models/UTXO';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
-const url = BtcRpcUrl.Testnet;
+const network = BtcRpcUrl.Testnet;
 
 class BtcRpcNode {
     // get single latest utxo of address
@@ -10,7 +10,7 @@ class BtcRpcNode {
     : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO>((resolve, reject) => request({
-            url: url + path as string,
+            url: network + path as string,
             method: 'GET' as string,
             forever: true as boolean
             },
@@ -27,7 +27,7 @@ class BtcRpcNode {
     : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO[]>((resolve, reject) => request({
-            url: url + path as string,
+            url: network + path as string,
             method: 'GET' as string,
             forever: true as boolean
             },
@@ -44,7 +44,7 @@ class BtcRpcNode {
     : Promise<string> => {
         const path : string = "tx" ;
         return new Promise<string>((resolve, reject) => request({
-            url: url + path as string,
+            url: network + path as string,
             method: 'POST' as string,
             body : txHex as string,
             forever: true as boolean
