@@ -8,6 +8,7 @@ import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';
 import UTXO from './models/UTXO.js';
 import BtcNetwork from './enums/BtcNetwork.js';
+import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
 class BtcPayment {
     // Account to pay transaction
@@ -42,8 +43,9 @@ class BtcPayment {
       signer : BtcSigner, toAddressList : string[], didmsg : string) 
     : Promise<string> => {
         // signerUTXO to spend
+        const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
         const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
-          signer.payment.address as string);
+          signer.payment.address as string, btcRpcUrl);
         // didOwnerList
         let receiverList : BtcReceiver[] = [];
         toAddressList.forEach(toAddress => {
@@ -69,8 +71,9 @@ class BtcPayment {
       signer : BtcSigner, receiverList : BtcReceiver[]) 
     : Promise<string> => {
         // signerUTXO to spend
+        const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
         const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
-          signer.payment.address as string);
+          signer.payment.address as string, btcRpcUrl);
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
           signer, receiverList, signerUTXOList);
@@ -127,7 +130,21 @@ class BtcPayment {
 
       const tx : bitcoin.Transaction = psbt.extractTransaction();
 
-      return await BtcRpcNode.broadcastTx(tx.toHex() as string) as string;
+      const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
+
+      return await BtcRpcNode.broadcastTx(
+        tx.toHex() as string, btcRpcUrl
+        ) as string;
+    }
+    // helper method to get network of signer
+    private static _getSignerNetwork = async(
+      signer: BtcSigner)
+    : Promise<BtcRpcUrl> => {
+      return signer.payment.network === bitcoin.networks.bitcoin ?
+      BtcRpcUrl.Mainnet 
+      : signer.payment.network === bitcoin.networks.testnet ? 
+      BtcRpcUrl.Testnet 
+      : BtcRpcUrl.Liquid
     }
 }
 
