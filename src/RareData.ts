@@ -50,7 +50,7 @@ class RareData{
         const decryptedData : Buffer = await eccrypto.decrypt(privateKeyBuffer, encryptedData);
         return decryptedData.toString() as string;
     }
-    // encrypt data with ECDH key derived
+    // encrypt data with cipher's fixed private key
     static encryptDataShared = async (privateKeyHexA : string, 
       publicKeyHexB: string, data: string)
     : Promise<Buffer> => {
@@ -65,7 +65,7 @@ class RareData{
       const tag : Buffer = cipher.getAuthTag();
       return Buffer.concat([firstChunk, secondChunk, tag, initializationVector]) as Buffer;
     }
-    // decrypt data with ECDH key derived
+    // encrypt data with cipher's fixed public key
     static decryptDataShared = async (privateKeyHexB : string, 
       publicKeyHexA: string, encryptedDataShared: Buffer)
     : Promise<string> => {
