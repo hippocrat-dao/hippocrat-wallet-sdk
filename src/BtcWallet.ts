@@ -5,6 +5,7 @@ import * as ecc from 'tiny-secp256k1';
 import wif from 'wif';
 import * as bip32 from 'bip32';
 import crypto from 'crypto';
+import BtcNetwork from './enums/BtcNetwork';
 
 const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
 
@@ -45,7 +46,9 @@ class BtcWallet{
         return child;
     }
     // Account is propogated in BTC network
-    static generateBtcAccount = async (btcAccountPotential : bip32.BIP32Interface) 
+    static generateBtcAccount = async (
+        btcAccountPotential : bip32.BIP32Interface,
+        btcNetwork : BtcNetwork) 
     : Promise<string> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
@@ -58,7 +61,13 @@ class BtcWallet{
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({
             pubkey: keyPair.publicKey as Buffer,
-            network: bitcoin.networks.testnet as bitcoin.networks.Network });
+            network: 
+                btcNetwork === "mainnet" ? 
+                bitcoin.networks.bitcoin
+                : btcNetwork === "testnet" ? 
+                bitcoin.networks.testnet
+                : bitcoin.networks.regtest/* liquid */ as bitcoin.networks.Network 
+            });
         return payment.address as string;
     }
     // encrypt mnemonic with pbkdf2 key derived from password
