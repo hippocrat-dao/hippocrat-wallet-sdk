@@ -4,6 +4,7 @@ import * as ecc from 'tiny-secp256k1';
 import * as wif from 'wif';
 import BtcRpcNode from './BtcRpcNode.js';
 import coinSelect from 'coinselect';
+import * as liquid from 'liquidjs-lib';
 import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';
 import UTXO from './models/UTXO.js';
@@ -32,7 +33,7 @@ class BtcPayment {
                 bitcoin.networks.bitcoin
                 : btcNetwork === "testnet" ? 
                 bitcoin.networks.testnet
-                : bitcoin.networks.regtest/* liquid */ as bitcoin.networks.Network 
+                : liquid.networks.liquid as bitcoin.networks.Network 
             });
         return {
             payment,
