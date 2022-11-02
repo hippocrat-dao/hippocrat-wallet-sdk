@@ -7,15 +7,17 @@ import coinSelect from 'coinselect';
 import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';
 import UTXO from './models/UTXO.js';
+import BtcNetwork from './enums/BtcNetwork.js';
 
 class BtcPayment {
     // Account to pay transaction
-    static getBtcSigner = async (privateKey : Buffer)
+    static getBtcSigner = async (
+      privateKey : Buffer, btcNetwork : BtcNetwork)
     : Promise<BtcSigner> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
-        const wifEncodedKey : string = wif.encode(128 as number, 
-            privateKey, true as boolean
+        const wifEncodedKey : string = wif.encode(
+            128 as number, privateKey, true as boolean
         );
         const keyPair : ecPair.ECPairInterface = ecPair.ECPairFactory(ecc)
         .fromWIF(
@@ -24,7 +26,13 @@ class BtcPayment {
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: keyPair.publicKey as Buffer,
-            network: bitcoin.networks.testnet as bitcoin.networks.Network });
+            network: 
+                btcNetwork === "mainnet" ? 
+                bitcoin.networks.bitcoin
+                : btcNetwork === "testnet" ? 
+                bitcoin.networks.testnet
+                : bitcoin.networks.regtest/* liquid */ as bitcoin.networks.Network 
+            });
         return {
             payment,
             keyPair
