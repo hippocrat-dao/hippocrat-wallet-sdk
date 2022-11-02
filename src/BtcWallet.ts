@@ -5,6 +5,7 @@ import * as ecc from 'tiny-secp256k1';
 import wif from 'wif';
 import * as bip32 from 'bip32';
 import crypto from 'crypto';
+import * as liquid from 'liquidjs-lib';
 import BtcNetwork from './enums/BtcNetwork';
 
 const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
@@ -66,7 +67,7 @@ class BtcWallet{
                 bitcoin.networks.bitcoin
                 : btcNetwork === "testnet" ? 
                 bitcoin.networks.testnet
-                : bitcoin.networks.regtest/* liquid */ as bitcoin.networks.Network 
+                : liquid.networks.liquid as bitcoin.networks.Network 
             });
         return payment.address as string;
     }
