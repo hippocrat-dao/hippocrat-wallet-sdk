@@ -2,11 +2,11 @@ import request from 'request';
 import UTXO from './models/UTXO';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
-const network = BtcRpcUrl.Testnet;
+//const network = BtcRpcUrl.Testnet;
 
 class BtcRpcNode {
     // get single latest utxo of address
-    static getUTXOLatest = async (address : string) 
+    static getUTXOLatest = async (address : string, network : BtcRpcUrl) 
     : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO>((resolve, reject) => request({
@@ -23,7 +23,7 @@ class BtcRpcNode {
             }))
     }
     // get utxo list of address
-    static getUTXOList = async (address : string) 
+    static getUTXOList = async (address : string, network : BtcRpcUrl) 
     : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
         return new Promise<UTXO[]>((resolve, reject) => request({
@@ -40,7 +40,7 @@ class BtcRpcNode {
             }))
     }
     // broadcast transaction to network
-    static broadcastTx = async (txHex : string) 
+    static broadcastTx = async (txHex : string, network : BtcRpcUrl) 
     : Promise<string> => {
         const path : string = "tx" ;
         return new Promise<string>((resolve, reject) => request({
