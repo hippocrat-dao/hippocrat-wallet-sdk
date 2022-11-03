@@ -25,6 +25,13 @@ class BtcPayment {
         .fromWIF(
             wifEncodedKey
         );
+        // change prefix for liquid
+        if(btcNetwork === 'liquid' || 'liquid-testnet') {
+          keyPair.network.messagePrefix = "\x18Liquid Signed Message:\n";
+          btcNetwork === 'liquid'?  
+          keyPair.network.bech32 = "ex"
+          : keyPair.network.bech32 = "tex";
+        }
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: keyPair.publicKey as Buffer,
@@ -33,7 +40,9 @@ class BtcPayment {
                 bitcoin.networks.bitcoin
                 : btcNetwork === "testnet" ? 
                 bitcoin.networks.testnet
-                : liquid.networks.liquid as bitcoin.networks.Network 
+                : btcNetwork === "liquid" ?
+                liquid.networks.liquid
+                : liquid.networks.testnet as bitcoin.networks.Network
             });
         return {
             payment,
@@ -145,7 +154,9 @@ class BtcPayment {
       BtcRpcUrl.Mainnet 
       : signer.payment.network === bitcoin.networks.testnet ? 
       BtcRpcUrl.Testnet 
-      : BtcRpcUrl.Liquid
+      : signer.payment.network === liquid.networks.liquid ? 
+      BtcRpcUrl.Liquid
+      : BtcRpcUrl.Liquid_Testnet
     }
 }
 
