@@ -131,8 +131,7 @@ class BtcPayment {
       signer : BtcSigner,
       psbt : bitcoin.Psbt)
     : Promise<string> => {
-      psbt.signInput(
-        0 as number,
+      psbt.signAllInputs(
         signer.keyPair as ecPair.ECPairInterface
       );
 
