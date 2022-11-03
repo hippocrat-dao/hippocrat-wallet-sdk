@@ -7,5 +7,6 @@ export default interface UTXO {
         block_hash: string | Buffer,
         block_time: number
     },
-    value: number
+    value: number,
+    asset?: string | Buffer
 }
