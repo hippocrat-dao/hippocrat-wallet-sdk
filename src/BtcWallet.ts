@@ -67,7 +67,9 @@ class BtcWallet{
                 bitcoin.networks.bitcoin
                 : btcNetwork === "testnet" ? 
                 bitcoin.networks.testnet
-                : liquid.networks.liquid as bitcoin.networks.Network 
+                : btcNetwork == "liquid" ?
+                liquid.networks.liquid
+                : liquid.networks.testnet as bitcoin.networks.Network 
             });
         return payment.address as string;
     }
