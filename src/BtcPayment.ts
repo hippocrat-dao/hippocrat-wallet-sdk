@@ -26,7 +26,8 @@ class BtcPayment {
             wifEncodedKey
         );
         // change prefix for liquid
-        if(btcNetwork === 'liquid' || 'liquid-testnet') {
+        if(btcNetwork === 'liquid' || 
+        btcNetwork === 'liquid testnet') {
           keyPair.network.messagePrefix = "\x18Liquid Signed Message:\n";
           btcNetwork === 'liquid'?  
           keyPair.network.bech32 = "ex"
