@@ -8,7 +8,7 @@ import RareData from '../dist/RareData.js'
 const mnemonic = await BtcWallet.generateWalletMnemonic();
 const child = await BtcWallet.getChildFromMnemonic(mnemonic);
 const grandChild = await BtcWallet.getChildFromAccount(child);
-const btcAddress =  await BtcWallet.generateBtcAccount(child);
+const btcAddress =  await BtcWallet.generateBtcAccount(child, "liquid testnet");
 const encrpytedMnemonic = await BtcWallet.generateEncryptedVault(mnemonic, "비밀번호 000!");
 const decryptedMnemonic = await BtcWallet.decryptVault(encrpytedMnemonic, "비밀번호 000!")
 console.log(mnemonic);
@@ -35,18 +35,29 @@ console.log(encrpytedDataShared);
 console.log(decryptedDataShared);
 
 // BtcRpcNodeLog
-const utxo = await BtcRpcNode.getUTXOLatest("tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c");
-const utxoList = await BtcRpcNode.getUTXOList("tb1qsww2x6w2mjmdfv3lcr6gxzxfalykrxxsqprpp7");
+const utxo = await BtcRpcNode.getUTXOLatest(
+    "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
+    "https://blockstream.info/testnet/api/");
+const utxoList = await BtcRpcNode.getUTXOList(
+    "tb1qsww2x6w2mjmdfv3lcr6gxzxfalykrxxsqprpp7",
+    "https://blockstream.info/testnet/api/");
 console.log(utxo);
 console.log(utxoList);
 
 // BtcPaymentLog
 const mnemonicFixed = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비"
 const childFixed = await BtcWallet.getChildFromMnemonic(mnemonicFixed);
-const btcSigner = await BtcPayment.getBtcSigner(childFixed.privateKey);
-const btcDidTx =  await BtcPayment.createDid(btcSigner, "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c", "go-human-go");
+const btcSigner = await BtcPayment.getBtcSigner(childFixed.privateKey, "testnet");
+const btcDidTx =  await BtcPayment.registerDid(btcSigner, 
+    ["tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
+    "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c"], "go-human-go");/*
+const btcTx = await BtcPayment.segWitTransfer(btcSigner,
+    [{address: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c", value: 1000},
+    {address: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c", value: 1000}]);*/
 console.log(btcSigner);
+console.log(btcSigner.payment.address);
 console.log(btcDidTx);
+//console.log(btcTx);
 
 // IonDidLog
 const jwk = await IonDid.generateKeyPair(grandChild);
