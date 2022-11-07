@@ -95,7 +95,12 @@ class BtcPayment {
     private static _utxoOptimizer = async(
       signer : BtcSigner, target : BtcReceiver[], signerUTXOList : UTXO[])
     : Promise<bitcoin.Psbt> => {
-        const feeRate : number = 55; // satoshis per byte
+        /*
+        satoshis per byte
+        10 s/b enough for next block confirm
+        need to increase when network traffic is anomal
+        */
+        const feeRate : number = 10;
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
         // .inputs and .outputs will be undefined if no solution was found
         if (!selectedUTXO.inputs || !selectedUTXO.outputs) return Promise.reject(
