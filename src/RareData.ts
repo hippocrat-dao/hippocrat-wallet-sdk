@@ -1,36 +1,9 @@
 import eccrypto from 'eccrypto';
 import crypto from 'crypto';
-import * as keyto from '@trust/keyto';
 
 const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
 
 class RareData{
-    // convert privateKeyJwk to hex
-    static privateKeyHexFromJwk = async (privateKeyJwk : JsonWebKey) 
-    : Promise<string> => {
-      return keyto
-        .from(
-          {
-            ...privateKeyJwk,
-            crv: 'K-256' as string,
-          },
-          'jwk' as string
-        )
-        .toString('blk' as string, 'private' as string) as string;
-    }
-    // convert publicKeyJwk to hex
-    static publicKeyHexFromJwk = async (publicKeyJwk: JsonWebKey) 
-    : Promise<string> => {
-      return keyto
-        .from(
-          {
-            ...publicKeyJwk,
-            crv: 'K-256' as string,
-          },
-          'jwk' as string
-        )
-        .toString('blk' as string, 'public' as string) as string;
-    };
     // ECIES is implemented for data encryption
     static encryptData = async (publicKeyHexTo : string, data : string)
     : Promise<eccrypto.Ecies> => {

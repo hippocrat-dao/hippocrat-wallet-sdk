@@ -2,6 +2,7 @@ import ION from '@decentralized-identity/ion-tools';
 import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
 import { BIP32Interface } from 'bip32';
 import IonService from './models/IonService';
+import keyto from '@trust/keyto';
 
 class IonDid {
   // generateKeyPair with key of btcAccount
@@ -62,6 +63,32 @@ class IonDid {
     const didResolved : any = await ION.resolve(didUri);
     return await didResolved;
   }
+  // convert privateKeyJwk to hex
+  static privateKeyHexFromJwk = async (privateKeyJwk : JsonWebKey) 
+  : Promise<string> => {
+    return keyto
+      .from(
+        {
+          ...privateKeyJwk,
+          crv: 'K-256' as string,
+        },
+        'jwk' as string
+      )
+      .toString('blk' as string, 'private' as string) as string;
+  }
+  // convert publicKeyJwk to hex
+  static publicKeyHexFromJwk = async (publicKeyJwk: JsonWebKey) 
+  : Promise<string> => {
+    return keyto
+      .from(
+        {
+          ...publicKeyJwk,
+          crv: 'K-256' as string,
+        },
+        'jwk' as string
+      )
+      .toString('blk' as string, 'public' as string) as string;
+  };
 }
 
 export default IonDid;
