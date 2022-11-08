@@ -1,4 +1,4 @@
 export default interface BtcReceiver {
     address: string, 
-    value: number
+    value: number // unit: satoshi
 }
