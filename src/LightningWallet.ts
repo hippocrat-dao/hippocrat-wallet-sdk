@@ -14,7 +14,7 @@ class LightningWallet {
     return lnd as lightning.AuthenticatedLnd;
   }
 
-  static getWalletInfo = async (lnd: lightning.AuthenticatedLnd)
+  static getNodeWalletInfo = async (lnd: lightning.AuthenticatedLnd)
   :Promise<lightning.GetWalletInfoResult> => {
     const wallet : lightning.GetWalletInfoResult = await lightning.getWalletInfo({lnd});
     // wallet of lnd
