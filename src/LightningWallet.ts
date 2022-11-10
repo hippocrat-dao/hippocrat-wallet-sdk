@@ -21,6 +21,25 @@ class LightningWallet {
     return wallet;
   }
 
+  static createInvoice = async (lnd: any)
+  :Promise<any> => {
+    const invoice : any = await lightning.createInvoice({lnd});
+
+    return invoice;
+  }
+
+  static createChannel =  async (
+    lnd:any , publicKey: string, channelSize: number)
+  :Promise<any> => {
+    /*
+      MyPublicKey = "029a566b8195283ebf34b10ee3e4b687ab618c1a7856a29dd58ba12a63abba7518";
+      channelSize must be >= 1000000;
+    */
+    const res =  lightning.openChannel({lnd, local_tokens: channelSize, partner_public_key: publicKey});
+
+    return res;
+  }
+
 }
 
 export default LightningWallet;
