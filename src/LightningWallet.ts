@@ -3,7 +3,7 @@ import LightningAuth from './enums/LightningAuth.js'
 
 class LightningWallet {
 
-  static authenticateSigner = async ()
+  static getLightningRpcNode = async ()
   :Promise<lightning.AuthenticatedLnd> => {
     const { lnd } = lightning.authenticatedLndGrpc({
       cert: LightningAuth.TLS,
