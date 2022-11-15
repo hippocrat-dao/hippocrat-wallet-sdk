@@ -47,7 +47,7 @@ class BtcWallet{
         return child;
     }
     // Account is propogated in BTC network
-    static generateBtcAccount = async (
+    static generateBtcAddressFromAccount = async (
         btcAccountPotential : bip32.BIP32Interface,
         btcNetwork : BtcNetwork) 
     : Promise<string> => {
