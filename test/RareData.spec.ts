@@ -19,3 +19,31 @@ describe('ECIES data encrypt/decrypt test', () => {
         assert.strictEqual(data, decryptedData);
     })
 })
+
+describe('ECDH+AES(with fixed key) data encrypt/decrypt test', () => {
+    it('shared data should be same after encrypt-decrypt process', async() => {
+
+        const mnemonic_A : string = await BtcWallet.generateWalletMnemonic();
+        const btcAccountPotential_A : BIP32Interface = await BtcWallet.getChildFromMnemonic(mnemonic_A);
+        const publicKey_A : string = (btcAccountPotential_A.publicKey as Buffer).toString('hex');
+        const privateKey_A : string = (btcAccountPotential_A.privateKey as Buffer).toString('hex');
+        const mnemonic_B : string = await BtcWallet.generateWalletMnemonic();
+        const btcAccountPotential_B : BIP32Interface = await BtcWallet.getChildFromMnemonic(mnemonic_B);
+        const publicKey_B : string = (btcAccountPotential_B.publicKey as Buffer).toString('hex');
+        const privateKey_B : string = (btcAccountPotential_B.privateKey as Buffer).toString('hex');
+
+        const sharedData : string = "shared rare data";
+        
+        const encryptedSharedDataFromA : Buffer =  await RareData.encryptDataShared(
+            privateKey_A, publicKey_B, sharedData);
+        const decryptedSharedDataFromA : string =  await RareData.decryptDataShared(
+            privateKey_A, publicKey_B, encryptedSharedDataFromA);
+        const encryptedSharedDataFromB : Buffer =  await RareData.encryptDataShared(
+            privateKey_B, publicKey_A, sharedData);
+        const decryptedSharedDataFromB : string =  await RareData.decryptDataShared(
+            privateKey_B, publicKey_A, encryptedSharedDataFromB);
+
+        assert.strictEqual(decryptedSharedDataFromA, sharedData);
+        assert.strictEqual(decryptedSharedDataFromA, decryptedSharedDataFromB);
+    })
+})
