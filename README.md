@@ -20,6 +20,6 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 
 ## RareData
 
-- [encrypt & decrypt data following ECIES](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/RareData.spec.ts)
+- [encrypt & decrypt data following ECIES(AES-GCM with temporary ECDH derived key)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/RareData.spec.ts)
 
 - [encrypt & decrypt data following AES-GCM with fixed ECDH derived key](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/RareData.spec.ts)
