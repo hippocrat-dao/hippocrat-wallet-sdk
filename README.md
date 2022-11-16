@@ -8,7 +8,7 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 
 ## BtcWallet
 
-- [generat HD wallet mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts)
+- [generate HD wallet mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts)
 
 - [derive BIP32 account From mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts)
 
