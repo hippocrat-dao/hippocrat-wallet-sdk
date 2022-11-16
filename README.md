@@ -17,3 +17,9 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 - [generate bitcoin address from BIP32 account](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts)
 
 - [encrypt & decrypt mnemonic to store vault securely](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts)
+
+## RareData
+
+- [encrypt & decrypt data following ECIES](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/RareData.spec.ts)
+
+- [encrypt & decrypt data following AES-GCM with fixed ECDH derived key](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/RareData.spec.ts)
