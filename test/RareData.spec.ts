@@ -9,11 +9,11 @@ describe('ECIES data encrypt/decrypt test', () => {
 
         const mnemonic : string = await BtcWallet.generateWalletMnemonic();
         const btcAccountPotential : BIP32Interface = await BtcWallet.getChildFromMnemonic(mnemonic);
-        const publicKey : string = (btcAccountPotential.publicKey as Buffer).toString('hex');
+        const publicKeyTo : string = (btcAccountPotential.publicKey as Buffer).toString('hex');
         const privateKey : string = (btcAccountPotential.privateKey as Buffer).toString('hex');
         const data : string = "rare data";
         
-        const encryptedData : eccrypto.Ecies = await RareData.encryptData(publicKey, data);
+        const encryptedData : eccrypto.Ecies = await RareData.encryptData(publicKeyTo, data);
         const decryptedData : string = await RareData.decryptData(privateKey, encryptedData);
 
         assert.strictEqual(data, decryptedData);
