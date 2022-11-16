@@ -43,3 +43,15 @@ describe('Btc address generator test', () => {
         assert.strictEqual(btcAddress.slice(0, 3), "bc1");
     })
 })
+
+describe('Mnemonic encrypt/decrypt test', () => {
+    it('mnemonic should be same after encryptioin-decryption process', async() => {
+        const mnemonic : string = await BtcWallet.generateWalletMnemonic();
+        const encryptedVault : Buffer = await BtcWallet.generateEncryptedVault(
+            mnemonic, "password");
+        const decryptedVault : string = await BtcWallet.decryptVault(
+            encryptedVault, "password");
+
+        assert.strictEqual(mnemonic, decryptedVault);
+    })
+})
