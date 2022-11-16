@@ -38,7 +38,7 @@ class RareData{
       const tag : Buffer = cipher.getAuthTag();
       return Buffer.concat([firstChunk, secondChunk, tag, initializationVector]) as Buffer;
     }
-    // encrypt data with cipher's fixed public key
+    // decrypt data with cipher's fixed public key
     static decryptDataShared = async (privateKeyHexB : string, 
       publicKeyHexA: string, encryptedDataShared: Buffer)
     : Promise<string> => {
