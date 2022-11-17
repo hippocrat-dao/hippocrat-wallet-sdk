@@ -3,12 +3,13 @@ import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
 import { BIP32Interface } from 'bip32';
 import IonService from './models/IonService';
 import JsonWebKey2020 from './models/JsonWebKey2020';
+import IonDidModel from './models/IonDidModel';
 import keyto from '@trust/keyto';
 
 class IonDid {
   // generateKeyPair with key of btcAccount
   static generateKeyPair = async (ionAccountPotential : BIP32Interface)
-  : Promise<any> => {
+  : Promise<JsonWebKey2020> => {
     const keyPair : Secp256k1KeyPair = await Secp256k1KeyPair
     .generate({
       secureRandom: () => ionAccountPotential.privateKey as Buffer
@@ -21,7 +22,7 @@ class IonDid {
   } 
   // generate did with public key
   static createDid = async (jsonWebKeyPair : JsonWebKey2020, ionServices?: IonService[])
-  : Promise<ION.DID> => {
+  : Promise<IonDidModel> => {
     const did : ION.DID = new ION.DID({
       content: {
         // Register the public key for authentication(private key belongs to user)
@@ -36,7 +37,7 @@ class IonDid {
         // Register an IdentityHub as a service
         services: ionServices
      }})
-     return await did;
+     return await did._ops[0];
   }
   // did short uri by instance(only resolvable after did published to ION network)
   static getDidUriShort = async (did: ION.DID) 
