@@ -2,6 +2,7 @@ import ION from '@decentralized-identity/ion-tools';
 import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
 import { BIP32Interface } from 'bip32';
 import IonService from './models/IonService';
+import JsonWebKey2020 from './models/JsonWebKey2020';
 import keyto from '@trust/keyto';
 
 class IonDid {
@@ -12,14 +13,14 @@ class IonDid {
     .generate({
       secureRandom: () => ionAccountPotential.privateKey as Buffer
     });
-    const jsonWebKeyPair : any = await keyPair.export({
+    const jsonWebKeyPair : JsonWebKey2020 = await keyPair.export({
       type: 'JsonWebKey2020' as 'JsonWebKey2020',
       privateKey: true as boolean
-    });
+    }) as JsonWebKey2020;
     return jsonWebKeyPair;
   } 
   // generate did with public key
-  static createDid = async (jsonWebKeyPair : any, ionServices?: IonService[])
+  static createDid = async (jsonWebKeyPair : JsonWebKey2020, ionServices?: IonService[])
   : Promise<ION.DID> => {
     const did : ION.DID = new ION.DID({
       content: {
@@ -28,7 +29,7 @@ class IonDid {
           {
             id: 'auth-key' as string,
             type: 'EcdsaSecp256k1VerificationKey2019' as 'EcdsaSecp256k1VerificationKey2019',
-            publicKeyJwk: jsonWebKeyPair.publicKeyJwk as any,
+            publicKeyJwk: jsonWebKeyPair.publicKeyJwk as JsonWebKey,
             purposes: [ 'authentication' ] as string[]
           }
         ] as any[],
