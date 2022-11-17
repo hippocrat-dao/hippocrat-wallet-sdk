@@ -40,21 +40,24 @@ class IonDid {
      return await did._ops[0];
   }
   // did short uri by instance(only resolvable after did published to ION network)
-  static getDidUriShort = async (did: ION.DID) 
+  static getDidUriShort = async (did: IonDidModel) 
   : Promise<string> => {
-    const shortFormUri : string = await did.getURI("short");
+    const didForOps : ION.DID = await this._getDidOpsFromModel(did);
+    const shortFormUri : string = await didForOps.getURI("short");
     return shortFormUri;
   }
   // did long uri by instance(able to use instantly without anchoring)
-  static getDidUriLong = async (did: ION.DID) 
+  static getDidUriLong = async (did: IonDidModel) 
   : Promise<string> => {
-    const longFormUri : string = await did.getURI();
+    const didForOps : ION.DID = await this._getDidOpsFromModel(did);
+    const longFormUri : string = await didForOps.getURI();
     return longFormUri;
   }
   // submit ion did on bitcoin chain -> default node is run by Microsoft
-  static anchorRequest = async (did: ION.DID) 
+  static anchorRequest = async (did: IonDidModel) 
   : Promise<string> => {
-    const anchorRequestBody : any = await did.generateRequest();
+    const didForOps : ION.DID = await this._getDidOpsFromModel(did);
+    const anchorRequestBody : any = await didForOps.generateRequest();
     const anchorRequest : any = new ION.AnchorRequest(anchorRequestBody);
     const anchorResponse : any = await anchorRequest.submit();
     return JSON.stringify(await anchorResponse);
@@ -91,6 +94,12 @@ class IonDid {
       )
       .toString('blk' as string, 'public' as string) as string;
   };
+
+  private static _getDidOpsFromModel = async (did: IonDidModel)
+  : Promise<ION.DID> => {
+    const didForOps : ION.DID = new ION.DID({ops: [did] as IonDidModel[]});
+    return didForOps;
+  }
 }
 
 export default IonDid;
