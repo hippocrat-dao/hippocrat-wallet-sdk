@@ -1,10 +1,11 @@
 import ION from '@decentralized-identity/ion-tools';
 import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
 import { BIP32Interface } from 'bip32';
+import keyto from '@trust/keyto';
 import IonService from './models/IonService';
 import JsonWebKey2020 from './models/JsonWebKey2020';
 import IonDidModel from './models/IonDidModel';
-import keyto from '@trust/keyto';
+import IonDidResolved from './models/IonDidResolved';
 
 class IonDid {
   // generateKeyPair with key of btcAccount
@@ -55,18 +56,18 @@ class IonDid {
   }
   // submit ion did on bitcoin chain -> default node is run by Microsoft
   static anchorRequest = async (did: IonDidModel) 
-  : Promise<string> => {
+  : Promise<IonDidResolved> => {
     const didForOps : ION.DID = await this._getDidOpsFromModel(did);
     const anchorRequestBody : any = await didForOps.generateRequest();
     const anchorRequest : any = new ION.AnchorRequest(anchorRequestBody);
-    const anchorResponse : any = await anchorRequest.submit();
-    return JSON.stringify(await anchorResponse);
+    const anchorResponse : string = await anchorRequest.submit();
+    return JSON.parse(anchorResponse);
   }
   // resolve published did if uri in short, unpublished one it in long
   static getDidResolved = async (didUri: string)
-  : Promise<any> => {
-    const didResolved : any = await ION.resolve(didUri);
-    return await didResolved;
+  : Promise<IonDidResolved> => {
+    const didResolved : IonDidResolved = await ION.resolve(didUri);
+    return didResolved;
   }
   // convert privateKeyJwk to hex
   static privateKeyHexFromJwk = async (privateKeyJwk : JsonWebKey) 
