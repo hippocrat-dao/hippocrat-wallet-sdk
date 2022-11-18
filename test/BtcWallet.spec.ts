@@ -1,8 +1,8 @@
 import * as assert from "assert";
 import { BIP32Interface } from "bip32";
 import { describe, it } from 'mocha';
-import BtcWallet from "../src/BtcWallet.js";
-import BtcNetwork from "../src/enums/BtcNetwork.js";
+import BtcWallet from "../sdk/BtcWallet.js";
+import BtcNetwork from "../sdk/enums/BtcNetwork.js";
 
 describe('Mnemonic generator test', () => {
     it('should return 12 words mnemonic', async() => {

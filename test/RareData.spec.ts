@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { describe, it } from 'mocha';
-import BtcWallet from "../src/BtcWallet.js";
-import RareData from "../src/RareData.js";
+import BtcWallet from "../sdk/BtcWallet.js";
+import RareData from "../sdk/RareData.js";
 import { BIP32Interface } from "bip32";
 
 describe('ECIES data encrypt/decrypt test', () => {

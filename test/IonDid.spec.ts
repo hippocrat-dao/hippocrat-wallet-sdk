@@ -1,11 +1,11 @@
 import * as assert from "assert";
 import { describe, it } from 'mocha';
-import BtcWallet from "../src/BtcWallet.js";
-import IonDid from "../src/IonDid.js";
-import IonService from '../src/models/IonService';
-import JsonWebKey2020 from '../src/models/JsonWebKey2020';
-import IonDidModel from "../src/models/IonDidModel.js";
-import ionDidResolved from "../src/models/IonDidResolved.js";
+import BtcWallet from "../sdk/BtcWallet.js";
+import IonDid from "../sdk/IonDid.js";
+import IonService from '../sdk/models/IonService';
+import JsonWebKey2020 from '../sdk/models/JsonWebKey2020';
+import IonDidModel from "../sdk/models/IonDidModel.js";
+import ionDidResolved from "../sdk/models/IonDidResolved.js";
 import { BIP32Interface } from "bip32";
 
 describe('generate ION key pair test', () => {
