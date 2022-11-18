@@ -29,6 +29,6 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "test": "c8 --reporter=html --reporter=text --all=true --include=dist/src/*.js mocha dist/test/**/*.js"
+    "test": "c8 --reporter=html --reporter=text --all=true --include=lib/sdk/*.js mocha lib/test/**/*.js"
   }
 }

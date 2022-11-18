@@ -9,13 +9,13 @@
     "noImplicitReturns": true,    
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
+    "outDir": "./lib",
     "rootDir": "./",
     "esModuleInterop": true,
     "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["sdk/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }
