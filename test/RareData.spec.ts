@@ -33,14 +33,12 @@ describe('ECDH+AES(with fixed key) data encrypt/decrypt test', () => {
         // When
         const encryptedSharedDataFromA : Buffer =  await hipocrat.RareData.encryptDataShared(
             privateKey_A, publicKey_B, sharedData);
-        const decryptedSharedDataFromA : string =  await hipocrat.RareData.decryptDataShared(
+        const decryptedSharedDataByA : string =  await hipocrat.RareData.decryptDataShared(
             privateKey_A, publicKey_B, encryptedSharedDataFromA);
-        const encryptedSharedDataFromB : Buffer =  await hipocrat.RareData.encryptDataShared(
-            privateKey_B, publicKey_A, sharedData);
-        const decryptedSharedDataFromB : string =  await hipocrat.RareData.decryptDataShared(
-            privateKey_B, publicKey_A, encryptedSharedDataFromB);
+        const decryptedSharedDataByB : string =  await hipocrat.RareData.decryptDataShared(
+            privateKey_B, publicKey_A, encryptedSharedDataFromA);
         // Then
-        assert.strictEqual(decryptedSharedDataFromA, sharedData);
-        assert.strictEqual(decryptedSharedDataFromA, decryptedSharedDataFromB);
+        assert.strictEqual(decryptedSharedDataByA, sharedData);
+        assert.strictEqual(decryptedSharedDataByA, decryptedSharedDataByB);
     })
 })
