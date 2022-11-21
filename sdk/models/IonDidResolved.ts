@@ -1,6 +1,6 @@
 import IonService from "./IonService"
 
-export default interface ionDidResolved {
+export default interface IonDidResolved {
     '@context': string,
     didDocument: {
         id: string,
