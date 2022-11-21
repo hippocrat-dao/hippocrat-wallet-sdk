@@ -4,15 +4,15 @@ import * as hipocrat from "../index.js";
 
 describe('get Bitcoin Signer test', () => {
     it('private key & network is crucial to function as btcSigner', async() => {
-
+        // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Mainnet;
-        
+        // When
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
             privateKey, btcNetwork)
-
+        // Then
         assert.strictEqual(
             btcSigner.keyPair.privateKey?.toString('hex'), 
             privateKey.toString('hex'));
@@ -25,7 +25,7 @@ describe('get Bitcoin Signer test', () => {
 
 describe('bitcoin DID registry test', () => {
     it('Tx contains OP_RETURN + 1 satoshi transfer to target address', async() => {
-
+        // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
@@ -34,13 +34,12 @@ describe('bitcoin DID registry test', () => {
             privateKey, btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const didmsg : string = "certified"
-
-        await hipocrat.BtcPayment.registerDid(btcSigner, [toAddress], didmsg);
-            
+        // When
+        await hipocrat.BtcPayment.registerDid(btcSigner, [toAddress], didmsg); 
         const didTxProcessing : hipocrat.UTXO = await hipocrat.BtcRpcNode.getUTXOLatest(
             toAddress, hipocrat.BtcRpcUrl.Testnet
         );
-
+        // Then
         assert.strictEqual(didTxProcessing.value, 1);
         assert.strictEqual(didTxProcessing.status.confirmed, false);
 
@@ -48,8 +47,8 @@ describe('bitcoin DID registry test', () => {
 })
 
 describe('bitcoin transfer transaction test', () => {
-    it('Tx contains OP_RETURN + 1 satoshi transfer to target address', async() => {
-
+    it('Tx contains target value & toAddress, could transfer to multiple address', async() => {
+        // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
@@ -58,18 +57,17 @@ describe('bitcoin transfer transaction test', () => {
             privateKey, btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const transferAmount : number = 2;
-
+        // When
         await hipocrat.BtcPayment.segWitTransfer(btcSigner, 
             [{
                 address: toAddress,
                 value: transferAmount
             }] as hipocrat.BtcReceiver[]
             );
-            
         const transferTxProcessing : hipocrat.UTXO = await hipocrat.BtcRpcNode.getUTXOLatest(
             toAddress, hipocrat.BtcRpcUrl.Testnet
         );
-
+        // Then
         assert.strictEqual(transferTxProcessing.value, 2);
         assert.strictEqual(transferTxProcessing.status.confirmed, false);
 
