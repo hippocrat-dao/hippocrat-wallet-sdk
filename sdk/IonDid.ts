@@ -1,11 +1,11 @@
 import ION from '@decentralized-identity/ion-tools';
 import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
-import { BIP32Interface } from 'bip32';
 import keyto from '@trust/keyto';
 import IonService from './models/IonService';
 import JsonWebKey2020 from './models/JsonWebKey2020';
 import IonDidModel from './models/IonDidModel';
 import IonDidResolved from './models/IonDidResolved';
+import BIP32Interface from './models/BIP32Interface';
 
 class IonDid {
   // generateKeyPair with key of btcAccount

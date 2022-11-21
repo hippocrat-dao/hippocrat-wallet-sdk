@@ -7,6 +7,7 @@ import * as bip32 from 'bip32';
 import crypto from 'crypto';
 import * as liquid from 'liquidjs-lib';
 import BtcNetwork from './enums/BtcNetwork';
+import BIP32Interface from './models/BIP32Interface';
 
 const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
 
@@ -22,7 +23,7 @@ class BtcWallet{
     }
     // derive child from BTC HD wallet
     static getChildFromMnemonic = async (mnemonic : string)
-    : Promise<bip32.BIP32Interface> => {
+    : Promise<BIP32Interface> => {
         const seed : Buffer = bip39.mnemonicToSeedSync(mnemonic);
         // hd wallet(master wallet)
         const root : bip32.BIP32Interface = bip32.BIP32Factory(
@@ -36,8 +37,8 @@ class BtcWallet{
         return child;
     }
     // Accounts are descendants of Mnemonic(HD wallet)
-    static getChildFromAccount = async (parentAccount : bip32.BIP32Interface)
-    : Promise<bip32.BIP32Interface> => {
+    static getChildFromAccount = async (parentAccount : BIP32Interface)
+    : Promise<BIP32Interface> => {
         // derived child account from parentAccount
         const child : bip32.BIP32Interface = parentAccount
             .deriveHardened(0 as number)
@@ -48,7 +49,7 @@ class BtcWallet{
     }
     // Account is propogated in BTC network
     static generateBtcAddressFromAccount = async (
-        btcAccountPotential : bip32.BIP32Interface,
+        btcAccountPotential : BIP32Interface,
         btcNetwork : BtcNetwork) 
     : Promise<string> => {
         /* wif stands for Wallet Import Format, 
