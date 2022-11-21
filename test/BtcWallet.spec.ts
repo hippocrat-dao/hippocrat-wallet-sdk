@@ -1,6 +1,6 @@
 import * as assert from "assert";
-import { BIP32Interface } from "bip32";
 import { describe, it } from 'mocha';
+import BIP32Interface from "../sdk/models/BIP32Interface.js";
 import BtcWallet from "../sdk/BtcWallet.js";
 import BtcNetwork from "../sdk/enums/BtcNetwork.js";
 

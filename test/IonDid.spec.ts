@@ -6,7 +6,7 @@ import IonService from '../sdk/models/IonService';
 import JsonWebKey2020 from '../sdk/models/JsonWebKey2020';
 import IonDidModel from "../sdk/models/IonDidModel.js";
 import ionDidResolved from "../sdk/models/IonDidResolved.js";
-import { BIP32Interface } from "bip32";
+import BIP32Interface from "../sdk/models/BIP32Interface.js";
 
 describe('generate ION key pair test', () => {
     it('Ion Key based on secp256k1 can be derived from bip39 mnemonic', async() => {

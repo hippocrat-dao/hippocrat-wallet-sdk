@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { describe, it } from 'mocha';
-import { BIP32Interface } from "bip32";
 import * as hipocrat from "../index.js";
+import BIP32Interface from "../sdk/models/BIP32Interface.js";
 import BtcSigner from "../sdk/models/BtcSigner.js";
 import BtcNetwork from "../sdk/enums/BtcNetwork.js";
 import UTXO from "../sdk/models/UTXO.js";

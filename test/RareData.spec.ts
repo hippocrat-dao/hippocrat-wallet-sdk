@@ -2,7 +2,8 @@ import * as assert from "assert";
 import { describe, it } from 'mocha';
 import BtcWallet from "../sdk/BtcWallet.js";
 import RareData from "../sdk/RareData.js";
-import { BIP32Interface } from "bip32";
+import BIP32Interface from "../sdk/models/BIP32Interface.js";
+import ECIES from "../sdk/models/ECIES.js";
 
 describe('ECIES data encrypt/decrypt test', () => {
     it('data should be same after encrypt-decrypt process', async() => {
@@ -13,7 +14,7 @@ describe('ECIES data encrypt/decrypt test', () => {
         const privateKey : string = (btcAccountPotential.privateKey as Buffer).toString('hex');
         const data : string = "rare data";
         
-        const encryptedData : eccrypto.Ecies = await RareData.encryptData(publicKeyTo, data);
+        const encryptedData : ECIES = await RareData.encryptData(publicKeyTo, data);
         const decryptedData : string = await RareData.decryptData(privateKey, encryptedData);
 
         assert.strictEqual(data, decryptedData);
