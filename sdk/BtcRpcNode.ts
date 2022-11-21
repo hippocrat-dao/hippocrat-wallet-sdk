@@ -18,7 +18,7 @@ class BtcRpcNode {
                 err? 
                 reject(err) as void : 
                 resolve(
-                    JSON.parse(res.body as string)[0] as UTXO
+                    JSON.parse(res.body as string).at(-1) as UTXO
                     ) as void;
             }))
     }
