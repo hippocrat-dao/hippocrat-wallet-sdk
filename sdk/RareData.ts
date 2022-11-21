@@ -1,22 +1,23 @@
 import eccrypto from 'eccrypto';
 import crypto from 'crypto';
+import ECIES from './models/ECIES';
 
 const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
 
 class RareData{
     // ECIES is implemented for data encryption
     static encryptData = async (publicKeyHexTo : string, data : string)
-    : Promise<eccrypto.Ecies> => {
+    : Promise<ECIES> => {
         // convert hex key to buffer key
         const publicKeyBuffer : Buffer = Buffer.from(publicKeyHexTo, 'hex');
         // convert data to buffer
         const msg : Buffer = Buffer.from(data);    
-        const encryptedData : eccrypto.Ecies = await eccrypto.encrypt(
+        const encryptedData : ECIES = await eccrypto.encrypt(
           publicKeyBuffer, msg);
         return encryptedData;
     }
     // decrypt encrypted data
-    static decryptData = async (privateKeyHex : string, encryptedData : eccrypto.Ecies) 
+    static decryptData = async (privateKeyHex : string, encryptedData : ECIES) 
     : Promise<string> => {
         // convert hex key to buffer key
         const privateKeyBuffer : Buffer = Buffer.from(privateKeyHex, 'hex');        
