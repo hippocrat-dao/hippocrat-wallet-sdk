@@ -76,7 +76,7 @@ class BtcWallet{
     }
     // encrypt mnemonic with pbkdf2 key derived from password
     static generateEncryptedVault = async (mnemonic: string, password: string) 
-    : Promise<Buffer> => {
+    : Promise<string> => {
         // generate salt
         const salt : Buffer = crypto.randomBytes(32);
         // pbkdf2 is slow for security(310,000 is recommendation of OWASP)
@@ -95,11 +95,12 @@ class BtcWallet{
         const tag = cipher.getAuthTag();
         const encryptedVault = Buffer.concat([firstChunk, secondChunk, tag,
             salt, initializationVector]);
-        return encryptedVault;
+        return encryptedVault.toString('base64');
     }
     // decrypt mnemonic with password & encryptedMnemonic
-    static decryptVault = async (encryptedVault: Buffer, password: string) 
+    static decryptVault = async (encryptedVaultStr: string, password: string) 
     : Promise<string> => {
+        const encryptedVault : Buffer = Buffer.from(encryptedVaultStr,'base64');
         // seperate mnemonic, salt and iv
         const initializationVector : Buffer = encryptedVault.slice(
             encryptedVault.length-16);
