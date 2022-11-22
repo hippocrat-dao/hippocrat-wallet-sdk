@@ -31,7 +31,7 @@ describe('ECDH+AES(with fixed key) data encrypt/decrypt test', () => {
         const privateKey_B : string = (btcAccountPotential_B.privateKey as Buffer).toString('hex');
         const sharedData : string = "shared rare data";
         // When
-        const encryptedSharedDataFromA : Buffer =  await hipocrat.RareData.encryptDataShared(
+        const encryptedSharedDataFromA : string =  await hipocrat.RareData.encryptDataShared(
             privateKey_A, publicKey_B, sharedData);
         const decryptedSharedDataByA : string =  await hipocrat.RareData.decryptDataShared(
             privateKey_A, publicKey_B, encryptedSharedDataFromA);

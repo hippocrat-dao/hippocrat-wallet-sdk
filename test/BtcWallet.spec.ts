@@ -57,7 +57,7 @@ describe('Mnemonic encrypt/decrypt test', () => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
         // When
-        const encryptedVault : Buffer = await hipocrat.BtcWallet.generateEncryptedVault(
+        const encryptedVault : string = await hipocrat.BtcWallet.generateEncryptedVault(
             mnemonic, "password");
         const decryptedVault : string = await hipocrat.BtcWallet.decryptVault(
             encryptedVault, "password");
