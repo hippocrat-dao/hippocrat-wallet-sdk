@@ -10,16 +10,17 @@ import BtcReceiver from './models/BtcReceiver.js';
 import UTXO from './models/UTXO.js';
 import BtcNetwork from './enums/BtcNetwork.js';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
+import BIP32Interface from './models/BIP32Interface.js';
 
 class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
-      privateKey : Buffer, btcNetwork : BtcNetwork)
+      btcAccountSigner : BIP32Interface, btcNetwork : BtcNetwork)
     : Promise<BtcSigner> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
         const wifEncodedKey : string = wif.encode(
-            128 as number, privateKey, true as boolean
+            128 as number, btcAccountSigner.privateKey as Buffer, true as boolean
         );
         const keyPair : ecPair.ECPairInterface = ecPair.ECPairFactory(ecc)
         .fromWIF(
