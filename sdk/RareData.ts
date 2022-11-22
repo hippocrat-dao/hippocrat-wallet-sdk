@@ -27,7 +27,7 @@ class RareData{
     // encrypt data with cipher's fixed private key
     static encryptDataShared = async (privateKeyHexA : string, 
       publicKeyHexB: string, data: string)
-    : Promise<Buffer> => {
+    : Promise<string> => {
       const sharedKey : Buffer = await eccrypto.derive(
         Buffer.from(privateKeyHexA, 'hex'), 
         Buffer.from(publicKeyHexB, 'hex'));
@@ -37,12 +37,15 @@ class RareData{
       const firstChunk : Buffer = cipher.update(data);
       const secondChunk : Buffer = cipher.final();
       const tag : Buffer = cipher.getAuthTag();
-      return Buffer.concat([firstChunk, secondChunk, tag, initializationVector]) as Buffer;
+      return Buffer
+            .concat([firstChunk, secondChunk, tag, initializationVector])
+            .toString('base64');
     }
     // decrypt data with cipher's fixed public key
     static decryptDataShared = async (privateKeyHexB : string, 
-      publicKeyHexA: string, encryptedDataShared: Buffer)
+      publicKeyHexA: string, encryptedDataSharedStr: string)
     : Promise<string> => {
+      const encryptedDataShared : Buffer = Buffer.from(encryptedDataSharedStr, 'base64');
       const sharedKey : Buffer = await eccrypto.derive(
         Buffer.from(privateKeyHexB, 'hex'), 
         Buffer.from(publicKeyHexA, 'hex'));
