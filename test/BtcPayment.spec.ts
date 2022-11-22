@@ -7,15 +7,15 @@ describe('get Bitcoin Signer test', () => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Mainnet;
         // When
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
-            privateKey, btcNetwork)
+            btcAccountPotential, 
+            btcNetwork);
         // Then
         assert.strictEqual(
             btcSigner.keyPair.privateKey?.toString('hex'), 
-            privateKey.toString('hex'));
+            btcAccountPotential.privateKey?.toString('hex'));
         assert.strictEqual(
             btcSigner.payment.network?.messagePrefix, 
             "\x18Bitcoin Signed Message:\n");
@@ -28,10 +28,10 @@ describe('bitcoin DID registry test', () => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Testnet;
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
-            privateKey, btcNetwork);
+            btcAccountPotential, 
+            btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const didmsg : string = "certified"
         // When
@@ -51,10 +51,10 @@ describe('bitcoin transfer transaction test', () => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const privateKey : Buffer = btcAccountPotential.privateKey as Buffer;
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Testnet;
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
-            privateKey, btcNetwork);
+            btcAccountPotential, 
+            btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const transferAmount : number = 2;
         // When
