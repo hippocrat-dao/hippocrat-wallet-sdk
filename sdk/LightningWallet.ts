@@ -1,15 +1,38 @@
 import * as lightning from 'lightning';
+import * as bip39 from 'bip39';
 import LightningAuth from './enums/LightningAuth.js'
 
 class LightningWallet {
 
   static getLightningRpcNodeAdmin = async ()
   :Promise<lightning.AuthenticatedLnd> => {
+    
     const { lnd } = lightning.authenticatedLndGrpc({
       cert: LightningAuth.TLS,
       macaroon: LightningAuth.Macaroon,
       socket: LightningAuth.Socket,
     });
+    // lnd is necessry arg for most of methods
+    return lnd as lightning.AuthenticatedLnd;
+  }
+
+  static getLightningRpcNodeForUser = async (
+    lndAuth : lightning.LndAuthentication,
+    mnemonic : string,
+    password: string)
+  :Promise<lightning.AuthenticatedLnd> => {
+
+    const { lnd: lndWithoutMacaroon } = lightning.unauthenticatedLndGrpc(lndAuth);
+
+    const seed : string = bip39.mnemonicToSeedSync(mnemonic).toString('hex');
+
+    const { macaroon } = await lightning.createWallet(
+      {lnd: lndWithoutMacaroon, seed, password});
+
+    const { lnd } =  lightning.authenticatedLndGrpc({
+      ...lndAuth,
+      macaroon
+    })
     // lnd is necessry arg for most of methods
     return lnd as lightning.AuthenticatedLnd;
   }
