@@ -44,7 +44,7 @@ class LightningWallet {
     return wallet;
   }
 
-  static createInvoice = async (lnd: lightning.AuthenticatedLnd)
+  static requestPayment = async (lnd: lightning.AuthenticatedLnd)
   :Promise<lightning.CreateInvoiceResult> => {
     /*
       there's no "address" in lightning network
