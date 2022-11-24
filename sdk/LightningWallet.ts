@@ -57,6 +57,17 @@ class LightningWallet {
     return channel;
   }
 
+  static closeChannel = async(
+    lnd: lightning.AuthenticatedLnd,
+    channel: lightning.OpenChannelResult)
+  : Promise<lightning.CloseChannelResult> => {
+
+    const closedChannel : lightning.CloseChannelResult = await lightning.closeChannel({
+      lnd, ...channel
+    })
+
+    return closedChannel;
+  }
 
   static requestPayment = async (
     lnd: lightning.AuthenticatedLnd,
