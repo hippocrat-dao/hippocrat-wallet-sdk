@@ -44,14 +44,18 @@ class LightningWallet {
     return wallet;
   }
 
-  static requestPayment = async (lnd: lightning.AuthenticatedLnd)
+  static requestPayment = async (
+    lnd: lightning.AuthenticatedLnd,
+    amount: number
+    )
   :Promise<lightning.CreateInvoiceResult> => {
     /*
       there's no "address" in lightning network
       only way to transfer is by creating invoice,
       which expires in 72 hours
     */
-    const invoice : lightning.CreateInvoiceResult = await lightning.createInvoice({lnd});
+    const invoice : lightning.CreateInvoiceResult = await lightning.createInvoice({
+      lnd, tokens: amount});
     // invoice to show client
     return invoice;
   }
