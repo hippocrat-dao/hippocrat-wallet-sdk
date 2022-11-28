@@ -5,11 +5,11 @@ import IonService from './models/IonService';
 import JsonWebKey2020 from './models/JsonWebKey2020';
 import IonDidModel from './models/IonDidModel';
 import IonDidResolved from './models/IonDidResolved';
-import BIP32Interface from './models/BIP32Interface';
+import BtcAccount from './models/BtcAccount';
 
 class IonDid {
   // generateKeyPair with key of btcAccount
-  static generateKeyPair = async (ionAccountPotential : BIP32Interface)
+  static generateKeyPair = async (ionAccountPotential : BtcAccount)
   : Promise<JsonWebKey2020> => {
     const keyPair : Secp256k1KeyPair = await Secp256k1KeyPair
     .generate({

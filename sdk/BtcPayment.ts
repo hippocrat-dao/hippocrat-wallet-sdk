@@ -10,12 +10,12 @@ import BtcReceiver from './models/BtcReceiver.js';
 import UTXO from './models/UTXO.js';
 import BtcNetwork from './enums/BtcNetwork.js';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
-import BIP32Interface from './models/BIP32Interface.js';
+import BtcAccount from './models/BtcAccount.js';
 
 class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
-      btcAccountSigner : BIP32Interface, btcNetwork : BtcNetwork)
+      btcAccountSigner : BtcAccount, btcNetwork : BtcNetwork)
     : Promise<BtcSigner> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
