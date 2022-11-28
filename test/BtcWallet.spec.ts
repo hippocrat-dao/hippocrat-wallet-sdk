@@ -12,25 +12,25 @@ describe('Mnemonic generator test', () => {
     })
 })
 
-describe('Child BIP32 generator test', () => {
-    it('should return bip32 with 32 bytes hex private key', async() => {
+describe('Child BtcAccount(BIP32) generator test', () => {
+    it('should return btcAccount(bip32) with 32 bytes hex private key', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
         // When
-        const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const privateKey : string = (btcAccountPotential.privateKey as Buffer).toString('hex');
         // Then
         assert.strictEqual(privateKey.length, 64);
     })
 })
 
-describe('Grandchild BIP32 generator test', () => {
-    it('should return bip32 with 32 bytes hex private key', async() => {
+describe('Grandchild BtcAccount(BIP32) generator test', () => {
+    it('should return btcAccount(bip32) with 32 bytes hex private key', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         // When
-        const btcAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        const btcAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
         const privateKey : string = (btcAccountPotentialChild.privateKey as Buffer).toString('hex');
         // Then
         assert.strictEqual(privateKey.length, 64);
@@ -41,7 +41,7 @@ describe('Btc address generator test', () => {
     it('should return segwit address with 21 bytes hex with prefix "bc1"', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Mainnet;
         // When
         const btcAddress : string = await hipocrat.BtcWallet.generateBtcAddressFromAccount(

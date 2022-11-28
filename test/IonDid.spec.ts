@@ -3,11 +3,11 @@ import { describe, it } from 'mocha';
 import * as hipocrat from '../index.js'
 
 describe('generate ION key pair test', () => {
-    it('Ion Key based on secp256k1 can be derived from bip39 mnemonic', async() => {
+    it('Ion Key based on secp256k1 can be derived from HD wallet(bip39) mnemonic', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
         // When
         const ionJwkPair : hipocrat.JsonWebKey2020 = await hipocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         // Then
@@ -23,8 +23,8 @@ describe('create ION DID test', () => {
     it('check Ion DID format', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
         const ionJwkPair : hipocrat.JsonWebKey2020 = await hipocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hipocrat.IonService[] = [
             {
@@ -57,8 +57,8 @@ describe('get ION DID uri(long & short) test', () => {
     it('check ion did uri in right format', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
         const ionJwkPair : hipocrat.JsonWebKey2020 = await hipocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hipocrat.IonService[] = [
             {
@@ -93,8 +93,8 @@ describe('anchor ION DID test', () => {
     it('check anchored Ion DID has same uri intended', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
         const ionJwkPair : hipocrat.JsonWebKey2020 = await hipocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hipocrat.IonService[] = [
             {
@@ -141,8 +141,8 @@ describe('converter test for ION json web key pair->hex key pair', () => {
     it('Json Web Key can be converted to hex format for usage', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        const btcAccountPotentialParent : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
         const ionJwkPair : hipocrat.JsonWebKey2020 = await hipocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         // When
         const privateKeyHex : string = await hipocrat.IonDid.privateKeyHexFromJwk(ionJwkPair.privateKeyJwk as JsonWebKey);

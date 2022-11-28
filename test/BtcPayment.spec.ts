@@ -3,10 +3,10 @@ import { describe, it } from 'mocha';
 import * as hipocrat from "../index.js";
 
 describe('get Bitcoin Signer test', () => {
-    it('private key & network is crucial to function as btcSigner', async() => {
+    it('check private key & network, crucial to function as btcSigner', async() => {
         // Given
         const mnemonic : string = await hipocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Mainnet;
         // When
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
@@ -27,7 +27,7 @@ describe('bitcoin DID registry test', () => {
     it('Tx contains OP_RETURN + 1 satoshi transfer to target address', async() => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
-        const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Testnet;
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
             btcAccountPotential, 
@@ -50,7 +50,7 @@ describe('bitcoin transfer transaction test', () => {
     it('Tx contains target value & toAddress, could transfer to multiple address', async() => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
-        const btcAccountPotential : hipocrat.BIP32Interface = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Testnet;
         const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
             btcAccountPotential, 
