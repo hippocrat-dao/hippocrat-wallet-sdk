@@ -1,5 +1,4 @@
 import * as lightning from 'lightning';
-import * as bip39 from 'bip39';
 import LightningAuth from './enums/LightningAuth.js'
 
 class LightningPayment {
@@ -18,17 +17,16 @@ class LightningPayment {
 
   static getLightningRpcNodeForUser = async (
     lndAuth : lightning.LndAuthentication,
-    mnemonic : string,
     password: string)
   :Promise<lightning.AuthenticatedLnd> => {
 
     const { lnd: lndWithoutMacaroon } = lightning.unauthenticatedLndGrpc(lndAuth);
 
-    const seed : string = bip39.mnemonicToSeedSync(mnemonic).toString('hex');
+    const { seed } = await lightning.createSeed({lnd: lndWithoutMacaroon});
 
-    const { macaroon } = await lightning.createWallet(
+    const macaroon : any = await lightning.createWallet(
       {lnd: lndWithoutMacaroon, seed, password});
-
+    
     const { lnd } =  lightning.authenticatedLndGrpc({
       ...lndAuth,
       macaroon
