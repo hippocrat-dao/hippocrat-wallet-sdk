@@ -2,7 +2,7 @@ import * as lightning from 'lightning';
 import * as bip39 from 'bip39';
 import LightningAuth from './enums/LightningAuth.js'
 
-class LightningWallet {
+class LightningPayment {
 
   static getLightningRpcNodeAdmin = async ()
   :Promise<lightning.AuthenticatedLnd> => {
@@ -96,4 +96,4 @@ class LightningWallet {
 
 }
 
-export default LightningWallet;
+export default LightningPayment;
