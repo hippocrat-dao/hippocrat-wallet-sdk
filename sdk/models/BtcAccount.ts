@@ -1,4 +1,4 @@
-interface Network {
+export interface Network {
     wif: number;
     bip32: {
         public: number;
@@ -9,7 +9,7 @@ interface Network {
     pubKeyHash?: number;
     scriptHash?: number;
 }
-interface Signer {
+export interface Signer {
     publicKey: Buffer;
     lowR: boolean;
     sign(hash: Buffer, lowR?: boolean): Buffer;
@@ -17,7 +17,7 @@ interface Signer {
     signSchnorr(hash: Buffer): Buffer;
     verifySchnorr(hash: Buffer, signature: Buffer): boolean;
 }
-export default interface BIP32Interface extends Signer {
+export default interface BtcAccount extends Signer {
     chainCode: Buffer;
     network: Network;
     depth: number;
@@ -27,11 +27,11 @@ export default interface BIP32Interface extends Signer {
     identifier: Buffer;
     fingerprint: Buffer;
     isNeutered(): boolean;
-    neutered(): BIP32Interface;
+    neutered(): BtcAccount;
     toBase58(): string;
     toWIF(): string;
-    derive(index: number): BIP32Interface;
-    deriveHardened(index: number): BIP32Interface;
-    derivePath(path: string): BIP32Interface;
+    derive(index: number): BtcAccount;
+    deriveHardened(index: number): BtcAccount;
+    derivePath(path: string): BtcAccount;
     tweak(t: Buffer): Signer;
 }
