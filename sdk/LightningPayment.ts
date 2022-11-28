@@ -3,7 +3,7 @@ import LightningAuth from './enums/LightningAuth.js'
 
 class LightningPayment {
 
-  static getLightningRpcNodeAdmin = async ()
+  static getLNDAdmin = async ()
   :Promise<lightning.AuthenticatedLnd> => {
     
     const { lnd } = lightning.authenticatedLndGrpc({
@@ -15,7 +15,7 @@ class LightningPayment {
     return lnd as lightning.AuthenticatedLnd;
   }
 
-  static getLightningRpcNodeForUser = async (
+  static getLNDUser = async (
     lndAuth : lightning.LndAuthentication,
     password: string)
   :Promise<lightning.AuthenticatedLnd> => {
@@ -35,7 +35,7 @@ class LightningPayment {
     return lnd as lightning.AuthenticatedLnd;
   }
 
-  static getNodeWalletInfo = async (lnd: lightning.AuthenticatedLnd)
+  static getLNDWalletInfo = async (lnd: lightning.AuthenticatedLnd)
   :Promise<lightning.GetWalletInfoResult> => {
     const wallet : lightning.GetWalletInfoResult = await lightning.getWalletInfo({lnd});
     // wallet of lnd
