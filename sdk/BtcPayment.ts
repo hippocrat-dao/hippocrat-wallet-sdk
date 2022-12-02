@@ -11,6 +11,7 @@ import UTXO from './models/UTXO.js';
 import BtcNetwork from './enums/BtcNetwork.js';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 import BtcAccount from './models/BtcAccount.js';
+import TxFee from './enums/TxFee.js';
 
 class BtcPayment {
     // Account to pay transaction
@@ -52,7 +53,7 @@ class BtcPayment {
         };
     }
     static registerDid = async (
-      signer : BtcSigner, toAddressList : string[], didmsg : string) 
+      signer : BtcSigner, toAddressList : string[], didmsg : string, txFee : TxFee) 
     : Promise<string> => {
         // signerUTXO to spend
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
@@ -65,7 +66,7 @@ class BtcPayment {
         });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, receiverList, signerUTXOList);
+          signer, receiverList, signerUTXOList, txFee);
         // data to store for did
         const data : Buffer = Buffer.from(didmsg, 'utf8');
         const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
@@ -80,7 +81,7 @@ class BtcPayment {
     }
     // segWitTransfer support 
     static segWitTransfer = async (
-      signer : BtcSigner, receiverList : BtcReceiver[]) 
+      signer : BtcSigner, receiverList : BtcReceiver[], txFee : TxFee) 
     : Promise<string> => {
         // signerUTXO to spend
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
@@ -88,20 +89,16 @@ class BtcPayment {
           signer.payment.address as string, btcRpcUrl);
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, receiverList, signerUTXOList);
+          signer, receiverList, signerUTXOList, txFee);
         // sign and broadcast tx
         return await this._signAndBroadcastTx(signer, psbt);
     }
     // helper method to select UTXO and fee
     private static _utxoOptimizer = async(
-      signer : BtcSigner, target : BtcReceiver[], signerUTXOList : UTXO[])
+      signer : BtcSigner, target : BtcReceiver[], 
+      signerUTXOList : UTXO[], txFee : TxFee)
     : Promise<bitcoin.Psbt> => {
-        /*
-        satoshis per byte
-        10 s/b enough for next block confirm
-        need to increase when network traffic is anomal
-        */
-        const feeRate : number = 10;
+        const feeRate : number = txFee;
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
         // .inputs and .outputs will be undefined if no solution was found
         if (!selectedUTXO.inputs || !selectedUTXO.outputs) return Promise.reject(
