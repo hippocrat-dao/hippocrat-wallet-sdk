@@ -29,15 +29,15 @@ describe('bitcoin DID registry test', () => {
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcAccountPotential : hipocrat.BtcAccount = await hipocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const btcNetwork : hipocrat.BtcNetwork = hipocrat.BtcNetwork.Testnet;
-        const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(
-            btcAccountPotential, 
-            btcNetwork);
+        const btcSigner : hipocrat.BtcSigner = await hipocrat.BtcPayment.getBtcSigner(btcAccountPotential, btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const didmsg : string = "certified"
+        const txFee : hipocrat.TxFee = hipocrat.TxFee.Average;
         // When
-        await hipocrat.BtcPayment.registerDid(btcSigner, [toAddress], didmsg); 
+        await hipocrat.BtcPayment.registerDid(btcSigner, [toAddress], didmsg, txFee); 
         const didTxProcessing : hipocrat.UTXO = await hipocrat.BtcRpcNode.getUTXOLatest(
-            toAddress, hipocrat.BtcRpcUrl.Testnet
+            toAddress, 
+            hipocrat.BtcRpcUrl.Testnet
         );
         // Then
         assert.strictEqual(didTxProcessing.value, 1);
@@ -57,15 +57,18 @@ describe('bitcoin transfer transaction test', () => {
             btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const transferAmount : number = 2;
+        const txFee : hipocrat.TxFee = hipocrat.TxFee.Average;
         // When
         await hipocrat.BtcPayment.segWitTransfer(btcSigner, 
             [{
                 address: toAddress,
                 value: transferAmount
-            }] as hipocrat.BtcReceiver[]
+            }] as hipocrat.BtcReceiver[],
+            txFee
             );
         const transferTxProcessing : hipocrat.UTXO = await hipocrat.BtcRpcNode.getUTXOLatest(
-            toAddress, hipocrat.BtcRpcUrl.Testnet
+            toAddress, 
+            hipocrat.BtcRpcUrl.Testnet
         );
         // Then
         assert.strictEqual(transferTxProcessing.value, 2);
