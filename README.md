@@ -22,19 +22,19 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 
 - [get Bitcoin Signer to sign BTC transaction](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L5)
 
-- [generate BTC transaction including OP_RETURN + target addresses(Function as DID registry)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L26)
+- [generate BTC transaction including OP_RETURN and target addresses to register DID)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L26)
 
-- [generate BTC transaction including target values + addresses to transfer BTC to](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L49)
+- [generate BTC transaction including target values and target addresses to transfer BTC](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L49)
 
 ## IonDid
 
 - [generate Ion key pair based on secp256k1, which is compatible with bitcoin](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L5)
 
-- [create Ion DID to anchor](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L22)
+- [create Ion DID instance to anchor](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L22)
 
 - [get Ion DID uri(long&short)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L56)
 
-- [anchor Ion DID on Ion node(will be published on bitcoin)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L92)
+- [anchor Ion DID on Ion node(will be published on bitcoin network)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L92)
 
 - [get resolved(anchored or published) Ion Did](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L126)
 
