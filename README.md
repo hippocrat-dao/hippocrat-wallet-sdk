@@ -10,11 +10,11 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 
 - [generate HD wallet mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L5)
 
-- [derive BIP32 account From mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L15)
+- [derive BTC account(BIP32) From mnemonic](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L15)
 
-- [derive child BIP32 account From parent BIP32 account](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L27)
+- [derive child BTC account(BIP32) From parent BTC account(BIP32)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L27)
 
-- [generate bitcoin address from BIP32 account](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L40)
+- [generate bitcoin address from BTC account(BIP32)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L40)
 
 - [encrypt & decrypt mnemonic to store vault securely](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L55)
 
