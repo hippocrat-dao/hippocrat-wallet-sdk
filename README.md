@@ -22,7 +22,7 @@ Hipocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) a
 
 - [get Bitcoin Signer to sign BTC transaction](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L5)
 
-- [generate BTC transaction including OP_RETURN and target addresses to register DID)](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L26)
+- [generate BTC transaction including OP_RETURN(did message) and target addresses(did owner) to register DID](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L26)
 
 - [generate BTC transaction including target values and target addresses to transfer BTC](https://github.com/hipocrat-dao/hipocrat-wallet-sdk/blob/develop/test/BtcPayment.spec.ts#L49)
 
