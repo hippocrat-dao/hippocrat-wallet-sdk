@@ -71,7 +71,7 @@ class BtcPayment {
         const data : Buffer = Buffer.from(didmsg, 'utf8');
         const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
           { data: [data] as Buffer[] });
-        // add OP_RETURN(hipocrat did registry)
+        // add OP_RETURN(hippocrat did registry)
         psbt.addOutput({
           script: embed.output as Buffer,
           value: 0 as number
