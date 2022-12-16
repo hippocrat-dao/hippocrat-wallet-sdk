@@ -81,8 +81,10 @@ class BtcWallet{
         // generate salt
         const salt : Buffer = crypto.randomBytes(32);
         // get scrypt derived key from password
-        const N = 1024, r = 8, p = 1;
-        const dkLen = 32;
+        const N = 1024; // The CPU/memory cost; increases the overall difficulty
+        const r = 8; // The block size; increases the dependency on memory latency and bandwidth
+        const p = 1; // The parallelization cost; increases the dependency on multi-processing
+        const dkLen = 32; // digested key length
         const scryptKey : Uint8Array  = await scrypt.scrypt(
             Buffer.from(password, 'utf-8'), 
             salt, N, r, p, dkLen);
@@ -115,8 +117,10 @@ class BtcWallet{
         const encryptedMnemonic : Buffer = encryptedVault.slice(
             0, encryptedVault.length-64);
         // get scrypt derived key from password
-        const N = 1024, r = 8, p = 1;
-        const dkLen = 32;
+        const N = 1024; // The CPU/memory cost; increases the overall difficulty
+        const r = 8; // The block size; increases the dependency on memory latency and bandwidth
+        const p = 1; // The parallelization cost; increases the dependency on multi-processing
+        const dkLen = 32; // digested key length
         const scryptKey : Uint8Array  = await scrypt.scrypt(
             Buffer.from(password, 'utf-8'), 
             salt, N, r, p, dkLen);
