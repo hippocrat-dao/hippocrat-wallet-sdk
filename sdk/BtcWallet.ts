@@ -5,6 +5,7 @@ import * as ecc from 'tiny-secp256k1';
 import wif from 'wif';
 import * as bip32 from 'bip32';
 import crypto from 'crypto';
+import scrypt from 'scrypt-js';
 import * as liquid from 'liquidjs-lib';
 import BtcNetwork from './enums/BtcNetwork';
 import BtcAccount from './models/BtcAccount';
@@ -79,6 +80,59 @@ class BtcWallet{
     : Promise<string> => {
         // generate salt
         const salt : Buffer = crypto.randomBytes(32);
+        // get scrypt derived key from password
+        const N = 1024, r = 8, p = 1;
+        const dkLen = 32;
+        const scryptKey : Uint8Array  = await scrypt.scrypt(
+            Buffer.from(password, 'utf-8'), 
+            salt, N, r, p, dkLen);
+        // aes-256-gcm is implemented as symmetric key encryption
+        const initializationVector : Buffer = crypto.randomBytes(16);
+        const cipher : crypto.CipherGCM = crypto.createCipheriv(
+            ALGO, 
+            scryptKey, 
+            initializationVector);
+        const firstChunk : Buffer = cipher.update(mnemonic);
+        const secondChunk : Buffer = cipher.final();
+        const tag = cipher.getAuthTag();
+        const encryptedVault = Buffer.concat([firstChunk, secondChunk, tag,
+            salt, initializationVector]);
+        return encryptedVault.toString('base64');
+    }
+    // decrypt mnemonic with password & encryptedMnemonic
+    static decryptVault = async (encryptedVaultStr: string, password: string) 
+    : Promise<string> => {
+        const encryptedVault : Buffer = Buffer.from(encryptedVaultStr,'base64');
+        // seperate mnemonic, salt and iv
+        const initializationVector : Buffer = encryptedVault.slice(
+            encryptedVault.length-16);
+        const salt : Buffer = encryptedVault.slice(
+            encryptedVault.length-48, 
+            encryptedVault.length-16);
+        const tag : Buffer = encryptedVault.slice(
+            encryptedVault.length-64, 
+            encryptedVault.length-48);
+        const encryptedMnemonic : Buffer = encryptedVault.slice(
+            0, encryptedVault.length-64);
+        // get scrypt derived key from password
+        const N = 1024, r = 8, p = 1;
+        const dkLen = 32;
+        const scryptKey : Uint8Array  = await scrypt.scrypt(
+            Buffer.from(password, 'utf-8'), 
+            salt, N, r, p, dkLen);
+        // aes-256-gcm is implemented as symmetric key decryption
+        const decipher : crypto.DecipherGCM = crypto.createDecipheriv(
+            ALGO, scryptKey, initializationVector);
+        decipher.setAuthTag(tag);
+        const firstChunk : Buffer = decipher.update(encryptedMnemonic);
+        const secondChunk : Buffer = decipher.final();
+        return Buffer.concat([firstChunk, secondChunk]).toString() as string;
+    }
+    // encrypt mnemonic with pbkdf2 key derived from password
+    static generateEncryptedVaultLegacy = async (mnemonic: string, password: string) 
+    : Promise<string> => {
+        // generate salt
+        const salt : Buffer = crypto.randomBytes(32);
         // pbkdf2 is slow for security(310,000 is recommendation of OWASP)
         const pbkdf2Key : Buffer = crypto.pbkdf2Sync(
             Buffer.from(password, 'utf-8'), 
@@ -98,7 +152,7 @@ class BtcWallet{
         return encryptedVault.toString('base64');
     }
     // decrypt mnemonic with password & encryptedMnemonic
-    static decryptVault = async (encryptedVaultStr: string, password: string) 
+    static decryptVaultLegacy = async (encryptedVaultStr: string, password: string) 
     : Promise<string> => {
         const encryptedVault : Buffer = Buffer.from(encryptedVaultStr,'base64');
         // seperate mnemonic, salt and iv
