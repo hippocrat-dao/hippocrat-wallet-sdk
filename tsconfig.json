@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "target": "esNext",
-    "module": "esNext",
+    "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
