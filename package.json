@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "dependencies": {
     "@decentralized-identity/ion-tools": "^0.1.1",
     "@transmute/did-key-secp256k1": "^0.3.0-unstable.9",
