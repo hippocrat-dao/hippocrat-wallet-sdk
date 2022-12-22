@@ -13,7 +13,6 @@
     "ecpair": "^2.1.0",
     "lightning": "^6.2.7",
     "liquidjs-lib": "^6.0.2-liquid.17",
-    "request": "^2.88.2",
     "scrypt-js": "^3.0.1",
     "tiny-secp256k1": "^2.2.1",
     "wif": "^2.0.6"
@@ -26,7 +25,8 @@
     "c8": "^7.12.0",
     "mocha": "^10.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "node-polyfill-webpack-plugin": "^2.0.1"
   },
   "scripts": {
     "test": "c8 --reporter=html --reporter=text --all=true --include=lib/sdk/*.js mocha lib/test/**/*.js"
