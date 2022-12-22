@@ -25,11 +25,14 @@
     "@types/wif": "^2.0.2",
     "c8": "^7.12.0",
     "mocha": "^10.1.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4",
-    "node-polyfill-webpack-plugin": "^2.0.1"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "test": "c8 --reporter=html --reporter=text --all=true --include=lib/sdk/*.js mocha lib/test/**/*.js"
+    "test": "c8 --reporter=html --reporter=text --all=true --include=lib/sdk/*.js mocha lib/test/**/*.js",
+    "build": "webpack -w"
   }
 }
