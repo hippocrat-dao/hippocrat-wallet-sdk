@@ -1,4 +1,4 @@
-import request from 'request';
+import fetch from 'cross-fetch';
 import UTXO from './models/UTXO';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
@@ -9,51 +9,47 @@ class BtcRpcNode {
     static getUTXOLatest = async (address : string, network : BtcRpcUrl) 
     : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
-        return new Promise<UTXO>((resolve, reject) => request({
-            url: network + path as string,
-            method: 'GET' as string,
-            forever: true as boolean
-            },
-            (err : any, res : request.Response) => {
-                err? 
-                reject(err) as void : 
-                resolve(
-                    JSON.parse(res.body as string).at(-1) as UTXO
-                    ) as void;
-            }))
+        const res = await fetch(
+            network + path as string, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            } as any
+        );
+        return (await res.json()).at(-1) as UTXO;
     }
     // get utxo list of address
     static getUTXOList = async (address : string, network : BtcRpcUrl) 
     : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
-        return new Promise<UTXO[]>((resolve, reject) => request({
-            url: network + path as string,
-            method: 'GET' as string,
-            forever: true as boolean
-            },
-            (err : any, res : request.Response) => {
-                err? 
-                reject(err) as void : 
-                resolve(
-                    JSON.parse(res.body as string) as UTXO[]
-                    ) as void;
-            }))
+        const res = await fetch(
+            network + path as string, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            } as any
+        );
+        return (await res.json()) as UTXO[];
     }
     // broadcast transaction to network
     static broadcastTx = async (txHex : string, network : BtcRpcUrl) 
     : Promise<string> => {
         const path : string = "tx" ;
-        return new Promise<string>((resolve, reject) => request({
-            url: network + path as string,
-            method: 'POST' as string,
-            body : txHex as string,
-            forever: true as boolean
-            },
-            (err : any, res : request.Response) => {
-                err? 
-                reject(err) as void : 
-                resolve(res.body as string) as void;
-            }))   
+        const res = await fetch(
+            network + path as string, {
+                method: "POST",
+                body: txHex as string,
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            } as any
+        );
+        return await res.text() as string;
     }
 }
 
