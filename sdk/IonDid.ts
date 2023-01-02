@@ -1,28 +1,38 @@
-import ION from '@decentralized-identity/ion-tools';
-import { Secp256k1KeyPair } from '@transmute/did-key-secp256k1';
+import * as ION from '@decentralized-identity/ion-tools';
+import * as Secp256k1 from '@noble/secp256k1';
+import { base64url } from 'multiformats/bases/base64';
 import keyto from '@trust/keyto';
 import IonService from './models/IonService';
-import JsonWebKey2020 from './models/JsonWebKey2020';
 import IonDidModel from './models/IonDidModel';
 import IonDidResolved from './models/IonDidResolved';
 import BtcAccount from './models/BtcAccount';
+import IonKeyPair from './models/IonKeyPair';
 
 class IonDid {
   // generateKeyPair with key of btcAccount
   static generateKeyPair = async (ionAccountPotential : BtcAccount)
-  : Promise<JsonWebKey2020> => {
-    const keyPair : Secp256k1KeyPair = await Secp256k1KeyPair
-    .generate({
-      secureRandom: () => ionAccountPotential.privateKey as Buffer
-    });
-    const jsonWebKeyPair : JsonWebKey2020 = await keyPair.export({
-      type: 'JsonWebKey2020' as 'JsonWebKey2020',
-      privateKey: true as boolean
-    }) as JsonWebKey2020;
-    return jsonWebKeyPair;
+  : Promise<IonKeyPair> => {
+    const privateKeyBytes = ionAccountPotential.privateKey as Uint8Array;
+    const publicKeyBytes = await Secp256k1.getPublicKey(privateKeyBytes);
+
+    const d : string = base64url.baseEncode(privateKeyBytes);
+    // skip the first byte because it's used as a header to indicate whether the key is uncompressed
+    const x : string = base64url.baseEncode(publicKeyBytes.subarray(1, 33));
+    const y : string = base64url.baseEncode(publicKeyBytes.subarray(33, 65));
+
+    const publicJwk = {
+      // alg: 'ES256K',
+      kty: 'EC',
+      crv: 'secp256k1',
+      x,
+      y
+    };
+    const privateJwk = { ...publicJwk, d };
+
+    return {publicJwk, privateJwk};
   } 
   // generate did with public key
-  static createDid = async (jsonWebKeyPair : JsonWebKey2020, ionServices?: IonService[])
+  static createDid = async (ionKeyPair : IonKeyPair, ionServices?: IonService[])
   : Promise<IonDidModel> => {
     const did : ION.DID = new ION.DID({
       content: {
@@ -31,7 +41,7 @@ class IonDid {
           {
             id: 'auth-key' as string,
             type: 'EcdsaSecp256k1VerificationKey2019' as 'EcdsaSecp256k1VerificationKey2019',
-            publicKeyJwk: jsonWebKeyPair.publicKeyJwk as JsonWebKey,
+            publicJwk: ionKeyPair.publicJwk as JsonWebKey,
             purposes: [ 'authentication' ] as string[]
           }
         ] as any[],
@@ -69,26 +79,26 @@ class IonDid {
     const didResolved : IonDidResolved = await ION.resolve(didUri);
     return didResolved;
   }
-  // convert privateKeyJwk to hex
-  static privateKeyHexFromJwk = async (privateKeyJwk : JsonWebKey) 
+  // convert privateJwk to hex
+  static privateKeyHexFromJwk = async (privateJwk : JsonWebKey) 
   : Promise<string> => {
     return keyto
       .from(
         {
-          ...privateKeyJwk,
+          ...privateJwk,
           crv: 'K-256' as string,
         },
         'jwk' as string
       )
       .toString('blk' as string, 'private' as string) as string;
   }
-  // convert publicKeyJwk to hex
-  static publicKeyHexFromJwk = async (publicKeyJwk: JsonWebKey) 
+  // convert publicJwk to hex
+  static publicKeyHexFromJwk = async (publicJwk: JsonWebKey) 
   : Promise<string> => {
     return keyto
       .from(
         {
-          ...publicKeyJwk,
+          ...publicJwk,
           crv: 'K-256' as string,
         },
         'jwk' as string
