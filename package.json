@@ -3,7 +3,6 @@
     "@decentralized-identity/ion-tools": "^0.1.1",
     "@transmute/did-key-secp256k1": "^0.3.0-unstable.9",
     "@trust/keyto": "^1.0.1",
-    "arraybuffer-to-string": "^1.0.2",
     "bip32": "^3.1.0",
     "bip39": "^3.0.4",
     "bitcoin-ts": "^1.15.2",
@@ -13,7 +12,6 @@
     "eccrypto": "^1.1.6",
     "ecpair": "^2.1.0",
     "lightning": "^6.2.7",
-    "liquidjs-lib": "^6.0.2-liquid.17",
     "scrypt-js": "^3.0.1",
     "tiny-secp256k1": "^2.2.1",
     "wif": "^2.0.6"
