@@ -34,7 +34,8 @@ class IonDid {
   // generate did with public key
   static createDid = async (ionKeyPair : IonKeyPair, ionServices?: IonService[])
   : Promise<IonDidModel> => {
-    const did : ION.DID = new ION.DID({
+    const ionDid : IonDidModel = {
+      operation: 'create',
       content: {
         // Register the public key for authentication(private key belongs to user)
         publicKeys: [
@@ -46,9 +47,12 @@ class IonDid {
           }
         ] as any[],
         // Register an IdentityHub as a service
-        services: ionServices
-     }})
-     return await did._ops[0];
+        services: ionServices as IonService[]
+      },
+      recovery: ionKeyPair,
+      update: ionKeyPair
+    }
+    return ionDid;
   }
   // did short uri by instance(only resolvable after did published to ION network)
   static getDidUriShort = async (did: IonDidModel) 
