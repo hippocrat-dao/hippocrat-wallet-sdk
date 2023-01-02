@@ -42,7 +42,7 @@ class IonDid {
           {
             id: 'auth-key' as string,
             type: 'EcdsaSecp256k1VerificationKey2019' as 'EcdsaSecp256k1VerificationKey2019',
-            publicJwk: ionKeyPair.publicJwk as JsonWebKey,
+            publicKeyJwk: ionKeyPair.publicJwk as JsonWebKey,
             purposes: [ 'authentication' ] as string[]
           }
         ] as any[],
@@ -72,9 +72,8 @@ class IonDid {
   static anchorRequest = async (did: IonDidModel) 
   : Promise<IonDidResolved> => {
     const didForOps : ION.DID = await this._getDidOpsFromModel(did);
-    const anchorRequestBody : any = await didForOps.generateRequest();
-    const anchorRequest : any = new ION.AnchorRequest(anchorRequestBody);
-    const anchorResponse : string = await anchorRequest.submit();
+    const anchorRequest : any = await didForOps.generateRequest();
+    const anchorResponse : string = await ION.anchor(anchorRequest);
     return JSON.parse(anchorResponse);
   }
   // resolve published did if uri in short, unpublished one it in long
