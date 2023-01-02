@@ -12,6 +12,7 @@
     "eccrypto": "^1.1.6",
     "ecpair": "^2.1.0",
     "lightning": "^6.2.7",
+    "liquidjs-lib": "^6.0.2-liquid.23",
     "scrypt-js": "^3.0.1",
     "tiny-secp256k1": "^2.2.1",
     "wif": "^2.0.6"
