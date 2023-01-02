@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@decentralized-identity/ion-tools": "^0.1.1",
+    "@decentralized-identity/ion-tools": "^1.0.3",
     "@transmute/did-key-secp256k1": "^0.3.0-unstable.9",
     "@trust/keyto": "^1.0.1",
     "bip32": "^3.1.0",
