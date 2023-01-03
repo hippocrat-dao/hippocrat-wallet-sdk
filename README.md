@@ -36,9 +36,11 @@ hippocrat wallet sdk which supports bitcoin, its layer2(ION, liquid, lightning) 
 
 - [anchor Ion DID on Ion node(will be published on bitcoin network)](https://github.com/hippocrat-dao/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L92)
 
-- [get resolved(anchored or published) Ion Did](https://github.com/hippocrat-dao/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L126)
+- [get resolved(anchored or published) Ion DID](https://github.com/hippocrat-dao/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L126)
 
 - [convert json web key to hex key format](https://github.com/hippocrat-dao/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L140)
+
+- [sign & verify message with Ion DID](https://github.com/hippocrat-dao/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L156)
 
 ## RareData
 
