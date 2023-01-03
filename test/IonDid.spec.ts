@@ -152,3 +152,19 @@ describe('converter test for ION json web key pair->hex key pair', () => {
         assert.strictEqual(publicKeyHex.slice(2, 66), ionAccountPotentialChild.publicKey.toString('hex').slice(2));
     })
 })
+
+describe('ION DID sign & verify test', () => {
+    it('Json Web Signature can be generated and veirfied by ION DID to hex format for usage', async() => {
+        // Given
+        const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
+        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const msg : string = "I am the owner of this ION DID";
+        // When
+        const ionJWS : string = await hippocrat.IonDid.signMessage(msg, ionJwkPair.privateJwk);
+        const isJWSValid : boolean = await hippocrat.IonDid.verifyMessage(ionJWS, ionJwkPair.publicJwk);
+        // Then
+        assert.strictEqual(isJWSValid, true);
+    })
+})
