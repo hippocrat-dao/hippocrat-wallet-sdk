@@ -8,14 +8,14 @@ describe('generate ION key pair test', () => {
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        
         // When
-        const ionJwkPair : hippocrat.JsonWebKey2020 = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        
         // Then
-        assert.strictEqual(ionJwkPair.id.slice(0,8), "did:key:");
-        assert.strictEqual(ionJwkPair.type, "JsonWebKey2020");
-        assert.strictEqual(ionJwkPair.controller.slice(0,8), "did:key:");
-        assert.strictEqual((ionJwkPair.privateKeyJwk as JsonWebKey).crv, "secp256k1");
-        assert.strictEqual(ionJwkPair.publicKeyJwk.crv, "secp256k1");
+        assert.strictEqual((ionJwkPair.privateJwk as JsonWebKey).crv, "secp256k1");
+        assert.strictEqual(ionJwkPair.publicJwk.crv, "secp256k1");
+    
     })
 })
 
@@ -25,7 +25,7 @@ describe('create ION DID test', () => {
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const ionJwkPair : hippocrat.JsonWebKey2020 = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -47,9 +47,9 @@ describe('create ION DID test', () => {
         const IonDID : hippocrat.IonDidModel = await hippocrat.IonDid.createDid(ionJwkPair, ionServices);
         // Then
         assert.strictEqual(IonDID.operation, 'create');
-        assert.strictEqual(IonDID.content.publicKeys[0].publicKeyJwk, ionJwkPair.publicKeyJwk);
+        assert.strictEqual(IonDID.content.publicKeys[0].publicKeyJwk, ionJwkPair.publicJwk);
         assert.strictEqual(IonDID.content.services, ionServices);
-
+    
     })
 })
 
@@ -59,7 +59,7 @@ describe('get ION DID uri(long & short) test', () => {
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
-        const ionJwkPair : hippocrat.JsonWebKey2020 = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -85,7 +85,7 @@ describe('get ION DID uri(long & short) test', () => {
         assert.strictEqual(ionDidUriShort.slice(0,8), 'did:ion:');
         assert.strictEqual(ionDidUriLong.slice(0,8), 'did:ion:');
         assert.strictEqual(ionDidUriShort, ionDidUriLong.slice(0,54));
-
+    
     })
 })
 
@@ -95,7 +95,7 @@ describe('anchor ION DID test', () => {
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
-        const ionJwkPair : hippocrat.JsonWebKey2020 = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -143,10 +143,10 @@ describe('converter test for ION json web key pair->hex key pair', () => {
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
         const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const ionJwkPair : hippocrat.JsonWebKey2020 = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
         // When
-        const privateKeyHex : string = await hippocrat.IonDid.privateKeyHexFromJwk(ionJwkPair.privateKeyJwk as JsonWebKey);
-        const publicKeyHex : string = await hippocrat.IonDid.publicKeyHexFromJwk(ionJwkPair.publicKeyJwk);
+        const privateKeyHex : string = await hippocrat.IonDid.privateKeyHexFromJwk(ionJwkPair.privateJwk as JsonWebKey);
+        const publicKeyHex : string = await hippocrat.IonDid.publicKeyHexFromJwk(ionJwkPair.publicJwk);
         // Then
         assert.strictEqual(privateKeyHex, ionAccountPotentialChild.privateKey?.toString('hex'));
         assert.strictEqual(publicKeyHex.slice(2, 66), ionAccountPotentialChild.publicKey.toString('hex').slice(2));
