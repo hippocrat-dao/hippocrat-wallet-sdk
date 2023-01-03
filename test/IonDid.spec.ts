@@ -154,7 +154,7 @@ describe('converter test for ION json web key pair->hex key pair', () => {
 })
 
 describe('ION DID sign & verify test', () => {
-    it('Json Web Signature can be generated and veirfied by ION DID to hex format for usage', async() => {
+    it('Json Web Signature can be generated and veirfied by ION DID', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
