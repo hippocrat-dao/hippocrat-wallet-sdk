@@ -82,6 +82,16 @@ class IonDid {
     const didResolved : IonDidResolved = await ION.resolve(didUri);
     return didResolved;
   }
+  // sign message with ion did(kind of auth)
+  static signMessage = async (msg: string, ionPrivateJwk : JsonWebKey)
+  : Promise<string> => {
+    return await ION.sign({payload: msg, privateJwk: ionPrivateJwk})
+  }
+  // verify message from json web signature signed by ion did
+  static verifyMessage = async (signedMsg: string, ionPublicJwk : JsonWebKey)
+  : Promise<boolean> => {
+    return await ION.verify({jws: signedMsg, publicJwk: ionPublicJwk})
+  }
   // convert privateJwk to hex
   static privateKeyHexFromJwk = async (privateJwk : JsonWebKey) 
   : Promise<string> => {
