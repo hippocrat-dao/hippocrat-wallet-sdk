@@ -6,11 +6,11 @@ describe('generate ION key pair test', () => {
     it('Ion Key based on secp256k1 can be derived from HD wallet(bip39) mnemonic', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);
         
         // When
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         
         // Then
         assert.strictEqual((ionJwkPair.privateJwk as JsonWebKey).crv, "secp256k1");
@@ -23,9 +23,9 @@ describe('create ION DID test', () => {
     it('check Ion DID format', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -57,9 +57,9 @@ describe('get ION DID uri(long & short) test', () => {
     it('check ion did uri in right format', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);        
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -93,9 +93,9 @@ describe('anchor ION DID test', () => {
     it('check anchored Ion DID has same uri intended', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);        
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);        
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         const ionServices : hippocrat.IonService[] = [
             {
                 id: "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c",
@@ -141,15 +141,15 @@ describe('converter test for ION json web key pair->hex key pair', () => {
     it('Json Web Key can be converted to hex format for usage', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         // When
         const privateKeyHex : string = await hippocrat.IonDid.privateKeyHexFromJwk(ionJwkPair.privateJwk as JsonWebKey);
         const publicKeyHex : string = await hippocrat.IonDid.publicKeyHexFromJwk(ionJwkPair.publicJwk);
         // Then
-        assert.strictEqual(privateKeyHex, ionAccountPotentialChild.privateKey?.toString('hex'));
-        assert.strictEqual(publicKeyHex.slice(2, 66), ionAccountPotentialChild.publicKey.toString('hex').slice(2));
+        assert.strictEqual(privateKeyHex, ionAccountPotential.privateKey?.toString('hex'));
+        assert.strictEqual(publicKeyHex.slice(2, 66), ionAccountPotential.publicKey.toString('hex').slice(2));
     })
 })
 
@@ -157,9 +157,9 @@ describe('ION DID sign & verify test', () => {
     it('Json Web Signature can be generated and veirfied by ION DID', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
-        const ionAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotentialChild);
+        // Directly get non-btc purpose account from mnemonic
+        const ionAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 0, 0);
+        const ionJwkPair : hippocrat.IonKeyPair = await hippocrat.IonDid.generateKeyPair(ionAccountPotential);
         const msg : string = "I am the owner of this ION DID";
         // When
         const ionJWS : string = await hippocrat.IonDid.signMessage(msg, ionJwkPair.privateJwk);

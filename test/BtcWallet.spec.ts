@@ -12,40 +12,40 @@ describe('Mnemonic generator test', () => {
     })
 })
 
-describe('Child BtcAccount(BIP32) generator test', () => {
-    it('should return btcAccount(bip32) with 32 bytes hex private key', async() => {
+describe('BtcAccount(BIP32, BIP44) generator test', () => {
+    it('should return btcAccount(bip32, bip44) with 32 bytes hex private key', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
         // When
-        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
         const privateKey : string = (btcAccountPotential.privateKey as Buffer).toString('hex');
         // Then
         assert.strictEqual(privateKey.length, 64);
     })
 })
 
-describe('Grandchild BtcAccount(BIP32) generator test', () => {
-    it('should return btcAccount(bip32) with 32 bytes hex private key', async() => {
+describe('BtcAddress(BIP3, BIP44) generator test', () => {
+    it('should return btcAccount(bip32, bip44) with 32 bytes hex private key', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotentialParent : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
         // When
-        const btcAccountPotentialChild : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromAccount(btcAccountPotentialParent);
-        const privateKey : string = (btcAccountPotentialChild.privateKey as Buffer).toString('hex');
+        const btcAddressPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
+        const privateKey : string = (btcAddressPotential.privateKey as Buffer).toString('hex');
         // Then
         assert.strictEqual(privateKey.length, 64);
     })
 })
 
-describe('Btc address generator test', () => {
+describe('Btc compressed address generator test', () => {
     it('should return segwit address with 21 bytes hex with prefix "bc1"', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getChildFromMnemonic(mnemonic);
+        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
+        const btcAddressPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Mainnet;
         // When
-        const btcAddress : string = await hippocrat.BtcWallet.generateBtcAddressFromAccount(
-            btcAccountPotential, btcNetwork);
+        const btcAddress : string = await hippocrat.BtcWallet.generateBtcAddress(btcAddressPotential, btcNetwork);
         // Then
         assert.strictEqual(btcAddress.length, 42);
         assert.strictEqual(btcAddress.slice(0, 3), "bc1");
