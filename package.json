@@ -33,7 +33,8 @@
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "test": "c8 --reporter=html --reporter=text --all=true --include=lib/sdk/*.js mocha lib/esm/test/**/*.js",
+    "test": "c8 --reporter=html --reporter=text --all=true --include=lib/esm/src/*.js mocha lib/esm/test/**/*.js",
+    "test:cjs": "c8 --reporter=html --reporter=text --all=true --include=lib/cjs/src/*.js mocha lib/cjs/test/**/*.js",
     "build": "webpack -w"
   },
   "exports": {
