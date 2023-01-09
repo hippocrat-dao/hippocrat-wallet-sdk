@@ -16,8 +16,6 @@ class BtcWallet{
     // HD wallet will be for both ion and bitcoin
     static generateWalletMnemonic = async () 
     : Promise<string> => {
-        // korean phrase for UX
-        bip39.setDefaultWordlist('korean' as string) as void;
         // random mnemonic 12 words generated
         const mnemonic : string = bip39.generateMnemonic();
         return mnemonic;
