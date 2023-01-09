@@ -30,8 +30,8 @@ class BtcWallet{
         // derived child wallet from hd(potential to be btc wallet)
         const child : bip32.BIP32Interface = root
             .deriveHardened(44 as number) // purpose
-            .derive(0 as number) // coin type
-            .derive(index as number); // account
+            .deriveHardened(0 as number) // coin type
+            .deriveHardened(index as number); // account
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
@@ -54,7 +54,7 @@ class BtcWallet{
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
-        /* 
+    /* 
     Used for various purpose(IonDid, RareData) where EC is required,
     sepeated from BTC for security reasons while using same mnemoinc.
     Directly get non-btc purpose account from mnemoinc easily!
@@ -67,8 +67,8 @@ class BtcWallet{
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
         const child : bip32.BIP32Interface = root
             .deriveHardened(44 as number) // purpose
-            .derive(0 as number) // coin type
-            .derive(0 as number) // account
+            .deriveHardened(0 as number) // coin type
+            .deriveHardened(0 as number) // account
             .derive(0 as number) // for external use only
             .derive(0 as number) // address to use
             .derive(purpose as number) // ex) ION = 0, RareData = 1
