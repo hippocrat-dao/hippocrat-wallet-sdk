@@ -20,7 +20,7 @@ class BtcWallet{
         const mnemonic : string = bip39.generateMnemonic();
         return mnemonic;
     }
-    // derive child from BTC HD wallet
+    // derive child account from BTC HD wallet
     static getAccountFromMnemonic = async (mnemonic : string, index = 0)
     : Promise<BtcAccount> => {
         const seed : Buffer = bip39.mnemonicToSeedSync(mnemonic);
@@ -29,25 +29,24 @@ class BtcWallet{
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
         // derived child wallet from hd(potential to be btc wallet)
         const child : bip32.BIP32Interface = root
-            .deriveHardened(44 as number)
-            .derive(0 as number)
-            .derive(index as number);
+            .deriveHardened(44 as number) // purpose
+            .derive(0 as number) // coin type
+            .derive(index as number); // account
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
     // Accounts are descendants of Mnemonic(HD wallet)
-    static getChildFromAccount = async (parentAccount : BtcAccount)
+    static getAddressFromAccount = async (parentAccount : BtcAccount, index = 0)
     : Promise<BtcAccount> => {
         // derived child account from parentAccount
         const child : bip32.BIP32Interface = parentAccount
-            .deriveHardened(0 as number)
-            .derive(0 as number)
-            .derive(0 as number);
+            .derive(0 as number) // for external use only
+            .derive(index as number) // address to use
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
-    // Account is propogated in BTC network
-    static generateBtcAddressFromAccount = async (
+    // Account is compressed pubkey in BTC network
+    static generateBtcAddress = async (
         btcAccountPotential : BtcAccount,
         btcNetwork : BtcNetwork) 
     : Promise<string> => {
