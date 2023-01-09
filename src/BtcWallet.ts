@@ -78,13 +78,13 @@ class BtcWallet{
     }
     // Account is compressed pubkey in BTC network
     static generateBtcAddress = async (
-        btcAccountPotential : BtcAccount,
+        btcAddressPotential : BtcAccount,
         btcNetwork : BtcNetwork) 
     : Promise<string> => {
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
         const wifEncodedKey : string = wif.encode(128 as number, 
-            btcAccountPotential.privateKey as Buffer, true as boolean
+            btcAddressPotential.privateKey as Buffer, true as boolean
         );
         const keyPair : ecPair.ECPairInterface = ecPair
         .ECPairFactory(ecc as ecPair.TinySecp256k1Interface)
