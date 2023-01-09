@@ -21,7 +21,7 @@ class BtcWallet{
         return mnemonic;
     }
     // derive child from BTC HD wallet
-    static getChildFromMnemonic = async (mnemonic : string)
+    static getAccountFromMnemonic = async (mnemonic : string, index = 0)
     : Promise<BtcAccount> => {
         const seed : Buffer = bip39.mnemonicToSeedSync(mnemonic);
         // hd wallet(master wallet)
@@ -29,9 +29,9 @@ class BtcWallet{
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
         // derived child wallet from hd(potential to be btc wallet)
         const child : bip32.BIP32Interface = root
-            .deriveHardened(0 as number)
+            .deriveHardened(44 as number)
             .derive(0 as number)
-            .derive(0 as number);
+            .derive(index as number);
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
