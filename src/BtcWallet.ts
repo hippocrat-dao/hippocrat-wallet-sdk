@@ -45,6 +45,15 @@ class BtcWallet{
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
+    // In case you want to get deeper(than BIP 44 level) account
+    static getChildFromAddress = async (parentAddress : BtcAccount, index = 0)
+    : Promise<BtcAccount> => {
+        // derived child account from parentAddress
+        const child : bip32.BIP32Interface = parentAddress
+            .derive(index as number) // address to use
+        // child has 32 bytes private key, used for btc wallet private key directly
+        return child;
+    }
     // Account is compressed pubkey in BTC network
     static generateBtcAddress = async (
         btcAccountPotential : BtcAccount,
