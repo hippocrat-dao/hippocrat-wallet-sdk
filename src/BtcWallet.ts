@@ -27,22 +27,22 @@ class BtcWallet{
         // hd wallet(master wallet)
         const root : bip32.BIP32Interface = bip32.BIP32Factory(
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
-        // derived child wallet from hd(potential to be btc wallet)
+        // derived child account from hd(to manage BTC)
         const child : bip32.BIP32Interface = root
             .deriveHardened(44 as number) // purpose
             .deriveHardened(0 as number) // coin type
             .deriveHardened(index as number); // account
-        // child has 32 bytes private key, used for btc wallet private key directly
+        // child has 32 bytes private key
         return child;
     }
-    // Accounts are descendants of Mnemonic(HD wallet)
+    // Address is used for receiving and sending BTC
     static getAddressFromAccount = async (parentAccount : BtcAccount, index = 0)
     : Promise<BtcAccount> => {
-        // derived child account from parentAccount
+        // derived child address from parentAccount
         const child : bip32.BIP32Interface = parentAccount
             .derive(0 as number) // for external use only
             .derive(index as number) // address to use
-        // child has 32 bytes private key, used for btc wallet private key directly
+        // child has 32 bytes private key, used for btc address private key directly
         return child;
     }
     // In case you want to get deeper(than BIP 44 level) account
@@ -55,9 +55,10 @@ class BtcWallet{
         return child;
     }
     /* 
-    Used for various purpose(IonDid, RareData) where EC is required,
-    sepeated from BTC for security reasons while using same mnemoinc.
-    Directly get non-btc purpose account from mnemoinc easily!
+    Used for various purpose(ex) IonDid, RareData) where elliptic curve required,
+    seperated from BTC accounts & addresses for security reasons,
+    while using same mnemoinc.
+    Directly get non-btc purpose account from mnemonic easily!
     */
     static getNonBtcAccountFromMnemonic = async (mnemonic : string, purpose = 0, index = 0)
     : Promise<BtcAccount> => {
@@ -76,7 +77,7 @@ class BtcWallet{
         // child has 32 bytes private key of EC, used for various purposes
         return child;
     }
-    // Account is compressed pubkey in BTC network
+    // get compressed pubkey in BTC network
     static generateBtcAddress = async (
         btcAddressPotential : BtcAccount,
         btcNetwork : BtcNetwork) 
