@@ -14,7 +14,6 @@ describe('get Bitcoin Signer test', () => {
             btcAddressPotential, 
             btcNetwork);
         // Then
-        console.log(btcSigner.payment.address);
         assert.strictEqual(
             btcSigner.keyPair.privateKey?.toString('hex'), 
             btcAddressPotential.privateKey?.toString('hex'));
