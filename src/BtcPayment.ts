@@ -12,16 +12,22 @@ import BtcNetwork from './enums/BtcNetwork.js';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 import BtcAccount from './models/BtcAccount.js';
 import TxFee from './enums/TxFee.js';
+import BtcWallet from './BtcWallet.js';
 
 class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
-      btcAccountSigner : BtcAccount, btcNetwork : BtcNetwork)
+      mnemonic : string, btcNetwork : BtcNetwork, 
+      accountIndex = 0, addressIndex = 0, addressReuse = false)
     : Promise<BtcSigner> => {
+        const btcAccount : BtcAccount = await BtcWallet.getAccountFromMnemonic(
+          mnemonic, accountIndex);
+        const btcAddressSigner : BtcAccount = await BtcWallet.getAddressFromAccount(
+          btcAccount, addressIndex);
         /* wif stands for Wallet Import Format, 
            need to encode private key to import wallet */
         const wifEncodedKey : string = wif.encode(
-            128 as number, btcAccountSigner.privateKey as Buffer, true as boolean
+            128 as number, btcAddressSigner.privateKey as Buffer, true as boolean
         );
         const keyPair : ecPair.ECPairInterface = ecPair.ECPairFactory(ecc)
         .fromWIF(
@@ -47,9 +53,16 @@ class BtcPayment {
                 liquid.networks.liquid
                 : liquid.networks.testnet as bitcoin.networks.Network
             });
+        // change address to prevent address reuse if you can
+        const addressNext : string = addressReuse ? payment.address as string 
+        : await BtcWallet.generateBtcAddress(
+            await BtcWallet.getAddressFromAccount(btcAccount, addressIndex + 1),
+          btcNetwork);
+        
         return {
             payment,
-            keyPair
+            keyPair,
+            addressNext
         };
     }
     static registerDid = async (
@@ -121,7 +134,7 @@ class BtcPayment {
           // watch out, outputs may have been added that you need to provide
           // an output address/script for
           if (!output.address as boolean) {
-            output.address = signer.payment.address as string;
+            output.address = signer.addressNext as string;
           }
           psbt.addOutput({
             address: output.address as string,
