@@ -6,17 +6,17 @@ describe('get Bitcoin Signer test', () => {
     it('check private key & network, crucial to function as btcSigner', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
-        const btcAddressPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
+        const accountIndex : number = 0; // 0 is default, you don't need to specify actually
+        const addressIndex : number = 0; // 0 is default, you don't need to specify actually
+        const addressReuse : boolean = true; // false is default, reuse address just for test!
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Mainnet;
         // When
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
-            btcAddressPotential, 
-            btcNetwork);
+            mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         // Then
         assert.strictEqual(
-            btcSigner.keyPair.privateKey?.toString('hex'), 
-            btcAddressPotential.privateKey?.toString('hex'));
+            btcSigner.addressNext,
+            btcSigner.payment.address);
         assert.strictEqual(
             btcSigner.payment.network?.messagePrefix, 
             "\x18Bitcoin Signed Message:\n");
@@ -30,7 +30,7 @@ describe('bitcoin DID registry test', () => {
         const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
         const btcAddressPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet;
-        const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(btcAddressPotential, btcNetwork);
+        const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(mnemonic, btcNetwork);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const didmsg : string = "certified"
         const txFee : hippocrat.TxFee = hippocrat.TxFee.Average;
@@ -50,12 +50,12 @@ describe('bitcoin transfer transaction test', () => {
     it('Tx contains target value & toAddress, could transfer to multiple address', async() => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
-        const btcAccountPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
-        const btcAddressPotential : hippocrat.BtcAccount = await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
+        const accountIndex : number = 0; // 0 is default, you don't need to specify actually
+        const addressIndex : number = 1; // Let's use sibling address index 1
+        const addressReuse : boolean = true; // false is default, reuse address just for test!
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet;
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
-            btcAddressPotential, 
-            btcNetwork);
+            mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         const toAddress : string = "tb1qyk6e26ey6v0qc6uaxl9h3ky86uek3qhwx7pq3c";
         const transferAmount : number = 2;
         const txFee : hippocrat.TxFee = hippocrat.TxFee.Average;
