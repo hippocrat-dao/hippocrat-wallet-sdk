@@ -66,29 +66,26 @@ class BtcPayment {
         };
     }
     static writeOnBtc = async (
-      signer : BtcSigner, toAddressList : string[], didmsg : string, txFee : TxFee) 
+      signer : BtcSigner, messageList : string[], txFee : TxFee) 
     : Promise<string> => {
         // signerUTXO to spend
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
         const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
           signer.payment.address as string, btcRpcUrl);
-        // didOwnerList
-        let receiverList : BtcReceiver[] = [];
-        toAddressList.forEach(toAddress => {
-          receiverList.push({address: toAddress, value: 1})
-        });
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, receiverList, signerUTXOList, txFee);
+          signer, [], signerUTXOList, txFee);
         // data to store for did
-        const data : Buffer = Buffer.from(didmsg, 'utf8');
-        const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
-          { data: [data] as Buffer[] });
-        // add OP_RETURN(hippocrat did registry)
-        psbt.addOutput({
-          script: embed.output as Buffer,
-          value: 0 as number
-        } as bitcoin.PsbtTxOutput)
+        messageList.forEach((message) => {
+          const data : Buffer = Buffer.from(message, 'utf8');
+          const embed : bitcoin.payments.Payment = bitcoin.payments.embed(
+            { data: [data] as Buffer[] });
+          // add OP_RETURN(hippocrat did registry)
+          psbt.addOutput({
+            script: embed.output as Buffer,
+            value: 0 as number
+          } as bitcoin.PsbtTxOutput)
+        });
         // sign and broadcast tx
         return await this._signAndBroadcastTx(signer, psbt);
     }
@@ -115,7 +112,7 @@ class BtcPayment {
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
         // .inputs and .outputs will be undefined if no solution was found
         if (!selectedUTXO.inputs || !selectedUTXO.outputs) return Promise.reject(
-          new Error('No UTXO found for valid transaction. Please check whether UTXO are enough!'));
+          new Error('No UTXO found for valid transaction. Please check whether UTXOs are enough!'));
         // creation of psbt
         const psbt : bitcoin.Psbt = new bitcoin.Psbt({ 
           network: signer.payment.network as bitcoin.networks.Network });
