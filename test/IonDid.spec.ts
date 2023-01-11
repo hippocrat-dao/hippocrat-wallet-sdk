@@ -116,7 +116,7 @@ describe('anchor ION DID test', () => {
         const IonDID : hippocrat.IonDidModel = await hippocrat.IonDid.createDid(ionJwkPair, ionServices);
         const ionDidUriShort : string = await hippocrat.IonDid.getDidUriShort(IonDID);
         // When
-        const ionDidAnchored : hippocrat.IonDidResolved = await hippocrat.IonDid.anchorRequest(IonDID);
+        const ionDidAnchored : hippocrat.IonDidResolved = await hippocrat.IonDid.anchorDidOnChain(IonDID);
         // Then
         assert.strictEqual(ionDidAnchored.didDocument.id, ionDidUriShort);
 
