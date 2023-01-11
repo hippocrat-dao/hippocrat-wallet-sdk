@@ -1,16 +1,16 @@
 import * as lightning from 'lightning';
-import LightningAuth from './enums/LightningAuth.js'
+import LightningAuth from '../src/models/LightningAuth';
 
 class LightningPayment {
 
-  static getLNDAdmin = async ()
+  static getLNDAdmin = async (lndAuth : LightningAuth)
   :Promise<lightning.AuthenticatedLnd> => {
     
     const { lnd } = lightning.authenticatedLndGrpc({
-      cert: LightningAuth.TLS,
-      macaroon: LightningAuth.Macaroon,
-      socket: LightningAuth.Socket,
-    });
+      cert: lndAuth.cert,
+      macaroon: lndAuth.macaroon,
+      socket: lndAuth.socket,
+    } as LightningAuth);
     // lnd is necessry arg for most of methods
     return lnd as lightning.AuthenticatedLnd;
   }
