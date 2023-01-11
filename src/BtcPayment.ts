@@ -72,9 +72,13 @@ class BtcPayment {
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
         const signerUTXOList : UTXO[] = await BtcRpcNode.getUTXOList(
           signer.payment.address as string, btcRpcUrl);
+        // need to calculate OP_RETURN(message) bytes to include fee for optimizer in advance
+        const messageListBytes : number = (new Blob(messageList).size) + (messageList.length * 10);
+        // singleTxBytes * txFeeRecal = (singleTxBytes + msgBytes) * txFee
+        const txFeeRecalculated = Math.ceil(((192/*single tx size*/ + messageListBytes)*txFee)/192);
         // get optimized transaction  
         const psbt : bitcoin.Psbt = await this._utxoOptimizer(
-          signer, [], signerUTXOList, txFee);
+          signer, [], signerUTXOList, txFeeRecalculated);
         // data to store for did
         messageList.forEach((message) => {
           const data : Buffer = Buffer.from(message, 'utf8');
