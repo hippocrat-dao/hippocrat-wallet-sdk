@@ -69,7 +69,7 @@ class IonDid {
     return longFormUri;
   }
   // submit ion did on bitcoin chain -> default node is run by Microsoft
-  static anchorRequest = async (did: IonDidModel) 
+  static anchorDidOnChain = async (did: IonDidModel) 
   : Promise<IonDidResolved> => {
     const didForOps : ION.DID = await this._getDidOpsFromModel(did);
     const anchorRequest : any = await didForOps.generateRequest();
