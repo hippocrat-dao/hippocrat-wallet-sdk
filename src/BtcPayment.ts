@@ -65,7 +65,7 @@ class BtcPayment {
             addressNext
         };
     }
-    static registerDid = async (
+    static writeOnBtc = async (
       signer : BtcSigner, toAddressList : string[], didmsg : string, txFee : TxFee) 
     : Promise<string> => {
         // signerUTXO to spend
