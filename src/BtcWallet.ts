@@ -104,7 +104,7 @@ class BtcWallet{
             });
         return payment.address as string;
     }
-    // encrypt mnemonic with pbkdf2 key derived from password
+    // encrypt mnemonic with scrypt key derived from password
     static generateEncryptedVault = async (mnemonic: string, password: string) 
     : Promise<string> => {
         // generate salt
