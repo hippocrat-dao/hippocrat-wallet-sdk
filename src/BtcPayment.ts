@@ -93,7 +93,7 @@ class BtcPayment {
         return await this._signAndBroadcastTx(signer, psbt);
     }
     // segWitTransfer support 
-    static segWitTransfer = async (
+    static transferBtc = async (
       signer : BtcSigner, receiverList : BtcReceiver[], txFee : TxFee) 
     : Promise<string> => {
         // signerUTXO to spend
@@ -115,7 +115,7 @@ class BtcPayment {
         const selectedUTXO : any = coinSelect(signerUTXOList, target, feeRate);
         // .inputs and .outputs will be undefined if no solution was found
         if (!selectedUTXO.inputs || !selectedUTXO.outputs) return Promise.reject(
-          new Error('No UTXO found for valid transaction'));
+          new Error('No UTXO found for valid transaction. Please check whether UTXO are enough!'));
         // creation of psbt
         const psbt : bitcoin.Psbt = new bitcoin.Psbt({ 
           network: signer.payment.network as bitcoin.networks.Network });
