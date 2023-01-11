@@ -8,7 +8,7 @@ declare class IonDid {
     static createDid: (ionKeyPair: IonKeyPair, ionServices?: IonService[]) => Promise<IonDidModel>;
     static getDidUriShort: (did: IonDidModel) => Promise<string>;
     static getDidUriLong: (did: IonDidModel) => Promise<string>;
-    static anchorRequest: (did: IonDidModel) => Promise<IonDidResolved>;
+    static anchorDidOnChain: (did: IonDidModel) => Promise<IonDidResolved>;
     static getDidResolved: (didUri: string) => Promise<IonDidResolved>;
     static signMessage: (msg: string, ionPrivateJwk: JsonWebKey) => Promise<string>;
     static verifyMessage: (signedMsg: string, ionPublicJwk: JsonWebKey) => Promise<boolean>;

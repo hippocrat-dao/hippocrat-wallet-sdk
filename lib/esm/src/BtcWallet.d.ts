@@ -2,9 +2,11 @@ import BtcNetwork from './enums/BtcNetwork';
 import BtcAccount from './models/BtcAccount';
 declare class BtcWallet {
     static generateWalletMnemonic: () => Promise<string>;
-    static getChildFromMnemonic: (mnemonic: string) => Promise<BtcAccount>;
-    static getChildFromAccount: (parentAccount: BtcAccount) => Promise<BtcAccount>;
-    static generateBtcAddressFromAccount: (btcAccountPotential: BtcAccount, btcNetwork: BtcNetwork) => Promise<string>;
+    static getAccountFromMnemonic: (mnemonic: string, index?: number) => Promise<BtcAccount>;
+    static getAddressFromAccount: (parentAccount: BtcAccount, index?: number) => Promise<BtcAccount>;
+    static getChildFromAddress: (parentAddress: BtcAccount, index?: number) => Promise<BtcAccount>;
+    static getNonBtcAccountFromMnemonic: (mnemonic: string, purpose?: number, index?: number) => Promise<BtcAccount>;
+    static generateBtcAddress: (btcAddressPotential: BtcAccount, btcNetwork: BtcNetwork) => Promise<string>;
     static generateEncryptedVault: (mnemonic: string, password: string) => Promise<string>;
     static decryptVault: (encryptedVaultStr: string, password: string) => Promise<string>;
     static generateEncryptedVaultLegacy: (mnemonic: string, password: string) => Promise<string>;

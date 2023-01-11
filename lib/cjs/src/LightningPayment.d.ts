@@ -1,6 +1,7 @@
 import * as lightning from 'lightning';
+import LightningAuth from '../src/models/LightningAuth';
 declare class LightningPayment {
-    static getLNDAdmin: () => Promise<lightning.AuthenticatedLnd>;
+    static getLNDAdmin: (lndAuth: LightningAuth) => Promise<lightning.AuthenticatedLnd>;
     static getLNDUser: (lndAuth: lightning.LndAuthentication, password: string) => Promise<lightning.AuthenticatedLnd>;
     static getLNDWalletInfo: (lnd: lightning.AuthenticatedLnd) => Promise<lightning.GetWalletInfoResult>;
     static createChannel: (lnd: lightning.AuthenticatedLnd, publicKey: string, channelSize: number) => Promise<lightning.OpenChannelResult>;

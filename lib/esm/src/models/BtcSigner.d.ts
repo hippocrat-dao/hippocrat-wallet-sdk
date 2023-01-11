@@ -31,5 +31,6 @@ interface ECPairInterface extends Signer {
 export default interface BtcSigner {
     payment: Payment;
     keyPair: ECPairInterface;
+    addressNext: string;
 }
 export {};
