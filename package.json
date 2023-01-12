@@ -1,4 +1,5 @@
 {
+  "name": "hippocrat-wallet-sdk",
   "type": "module",
   "dependencies": {
     "@decentralized-identity/ion-tools": "^1.0.3",
