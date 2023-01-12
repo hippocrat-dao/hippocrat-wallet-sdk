@@ -40,7 +40,7 @@
   },
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
+      "require": "./lib/cjs/index.cjs",
       "import": "./lib/esm/index.js"
     }
   }
