@@ -17,7 +17,7 @@ import BtcWallet from './BtcWallet.js';
 class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
-      mnemonic : string, btcNetwork : BtcNetwork, 
+      mnemonic : string, btcNetwork : BtcNetwork = BtcNetwork.Mainnet, 
       accountIndex = 0, addressIndex = 0, addressReuse = false)
     : Promise<BtcSigner> => {
         const btcAccount : BtcAccount = await BtcWallet.getAccountFromMnemonic(
