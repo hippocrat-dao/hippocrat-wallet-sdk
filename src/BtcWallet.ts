@@ -23,7 +23,7 @@ class BtcWallet{
     // derive child account from BTC HD wallet
     static getAccountFromMnemonic = async (mnemonic : string, index = 0)
     : Promise<BtcAccount> => {
-        const seed : Buffer = bip39.mnemonicToSeedSync(mnemonic);
+        const seed : Buffer = await bip39.mnemonicToSeed(mnemonic);
         // hd wallet(master wallet)
         const root : bip32.BIP32Interface = bip32.BIP32Factory(
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
@@ -62,7 +62,7 @@ class BtcWallet{
     */
     static getNonBtcAccountFromMnemonic = async (mnemonic : string, purpose = 0, index = 0)
     : Promise<BtcAccount> => {
-        const seed : Buffer = bip39.mnemonicToSeedSync(mnemonic);
+        const seed : Buffer = await bip39.mnemonicToSeed(mnemonic);
         // hd wallet(master wallet)
         const root : bip32.BIP32Interface = bip32.BIP32Factory(
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
