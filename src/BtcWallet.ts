@@ -40,8 +40,8 @@ class BtcWallet{
     : Promise<BtcAccount> => {
         // derived child address from parentAccount
         const child : bip32.BIP32Interface = parentAccount
-            .derive(0 as number) // for external use only
-            .derive(index as number) // address to use
+            .deriveHardened(0 as number) // for external use only
+            .deriveHardened(index as number) // address to use
         // child has 32 bytes private key, used for btc address private key directly
         return child;
     }
@@ -50,7 +50,7 @@ class BtcWallet{
     : Promise<BtcAccount> => {
         // derived child account from parentAddress
         const child : bip32.BIP32Interface = parentAddress
-            .derive(index as number) // address to use
+            .deriveHardened(index as number) // address to use
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
@@ -70,10 +70,10 @@ class BtcWallet{
             .deriveHardened(44 as number) // purpose
             .deriveHardened(0 as number) // coin type
             .deriveHardened(0 as number) // account
-            .derive(0 as number) // for external use only
-            .derive(0 as number) // address to use
-            .derive(purpose as number) // ex) ION = 0, RareData = 1
-            .derive(index as number); // account to use
+            .deriveHardened(0 as number) // for external use only
+            .deriveHardened(0 as number) // address to use
+            .deriveHardened(purpose as number) // ex) ION = 0, RareData = 1
+            .deriveHardened(index as number); // account to use
         // child has 32 bytes private key of EC, used for various purposes
         return child;
     }
