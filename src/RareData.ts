@@ -19,10 +19,14 @@ class RareData{
     // decrypt encrypted data
     static decryptData = async (privateKeyHex : string, encryptedData : string) 
     : Promise<string> => {
+        const encryptedDataECIES : ECIES = JSON.parse(encryptedData, (k, v) => { 
+          if (v.type === "Buffer") return Buffer.from(v.data);
+          return v
+        })
         // convert hex key to buffer key
         const privateKeyBuffer : Buffer = Buffer.from(privateKeyHex, 'hex');        
         const decryptedData : Buffer = await eccrypto.decrypt(
-          privateKeyBuffer, JSON.parse(encryptedData) as ECIES);
+          privateKeyBuffer, encryptedDataECIES);
         return decryptedData.toString() as string;
     }
     // encrypt data with cipher's fixed private key
