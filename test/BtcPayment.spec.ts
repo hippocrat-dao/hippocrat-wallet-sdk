@@ -6,10 +6,10 @@ describe('get Bitcoin Signer test', () => {
     it('check private key & network, crucial to function as btcSigner', async() => {
         // Given
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
+        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Mainnet; // Mainnet is default, you don't need to specify actually
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
         const addressIndex : number = 0; // 0 is default, you don't need to specify actually
         const addressReuse : boolean = true; // false is default, reuse address just for test!
-        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Mainnet;
         // When
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
@@ -27,10 +27,10 @@ describe('write message on bitcoin test', () => {
     it('Tx contains message(could be multiple) to store as OP_RETURN', async() => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
+        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet; // Mainnet is default, Testnet for test
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
         const addressIndex : number = 2; // Let's use sibling address index 2
         const addressReuse : boolean = true; // false is default, reuse address just for test!
-        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet;
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         const message : string = "EiANB7qQmnIUenccT9ch1A3da8NfmmVGto5-oMKly8ruGQ" // ION DID can be written directly on BTC!
@@ -50,10 +50,10 @@ describe('bitcoin transfer transaction test', () => {
     it('Tx contains target value & toAddress, could transfer to multiple address', async() => {
         // Given
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
+        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet; // Mainnet is default, Testnet for test
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
         const addressIndex : number = 2; // Let's use sibling address index 2, for example
         const addressReuse : boolean = true; // false is default, reuse address just for test!
-        const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet;
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         const toAddress : string = "tb1q8twvf4zp5g0c3yudvl0a3hrktz0k5y3l4l4764";

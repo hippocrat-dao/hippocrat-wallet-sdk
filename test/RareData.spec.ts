@@ -11,7 +11,7 @@ describe('ECIES data encrypt/decrypt test', () => {
         const privateKey : string = (nonBtcAccountPotential.privateKey as Buffer).toString('hex');
         const data : string = "rare data";
         // When
-        const encryptedData : hippocrat.ECIES = await hippocrat.RareData.encryptData(publicKeyTo, data);
+        const encryptedData : string = await hippocrat.RareData.encryptData(publicKeyTo, data);
         const decryptedData : string = await hippocrat.RareData.decryptData(privateKey, encryptedData);
         // Then
         assert.strictEqual(data, decryptedData);
