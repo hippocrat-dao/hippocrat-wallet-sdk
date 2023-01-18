@@ -18,7 +18,7 @@ class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
       mnemonic : string, btcNetwork : BtcNetwork = BtcNetwork.Mainnet, 
-      accountIndex = 0, addressIndex = 0, addressReuse = false)
+      accountIndex = 0, addressIndex = 0, addressReuse = true)
     : Promise<BtcSigner> => {
         const btcAccount : BtcAccount = await BtcWallet.getAccountFromMnemonic(
           mnemonic, accountIndex);
