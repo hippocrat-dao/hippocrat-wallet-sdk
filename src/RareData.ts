@@ -1,4 +1,3 @@
-import eccrypto from 'eccrypto';
 import * as crypto from 'crypto-browserify';
 import {Buffer} from 'buffer';
 
@@ -6,13 +5,21 @@ const ALGO : crypto.CipherGCMTypes = 'aes-256-gcm';
 
 class RareData{
     // ECIES is implemented for data encryption
-    static encryptData = async (toPubKeyHex : string, data : string)
+    static encryptData = async (toPubKeyHex : string, data : string, fromPrivKeyHex? : string)
     : Promise<string> => {
         // convert hex key to buffer key
         const toPubKeyBuffer : Buffer = Buffer.from(toPubKeyHex, 'hex');
         // convert data to buffer
         const fromAlice : crypto.ECDH = await crypto.createECDH('secp256k1');
-        const fromPubKey : Buffer =  await fromAlice.generateKeys();
+        let fromPubKey: Buffer;
+        if(fromPrivKeyHex === undefined) {
+          fromPubKey =  await fromAlice.generateKeys()
+        } else {
+          // convert hex key to buffer key
+          const fromPrivKeyBuffer : Buffer = Buffer.from(fromPrivKeyHex, 'hex');
+          fromAlice.setPrivateKey(fromPrivKeyBuffer);
+          fromPubKey = fromAlice.getPublicKey();
+        }
         const ecdhKey : Buffer = await fromAlice.computeSecret(toPubKeyBuffer);
         // aes-256-gcm is implemented as symmetric key encryption
         const initializationVector = crypto.randomBytes(16);
@@ -47,41 +54,6 @@ class RareData{
         const firstChunk : Buffer = decipher.update(encryptedMessage);
         const secondChunk : Buffer = decipher.final();
         return Buffer.concat([firstChunk, secondChunk]).toString() as string;
-    }
-    // encrypt data with cipher's fixed private key
-    static encryptDataShared = async (privateKeyHexA : string, 
-      publicKeyHexB: string, data: string)
-    : Promise<string> => {
-      const sharedKey : Buffer = await eccrypto.derive(
-        Buffer.from(privateKeyHexA, 'hex'), 
-        Buffer.from(publicKeyHexB, 'hex'));
-      // aes-256-gcm is implemented as symmetric key encryption
-      const initializationVector = crypto.randomBytes(16);
-      const cipher : crypto.CipherGCM = crypto.createCipheriv(ALGO, sharedKey, initializationVector);
-      const firstChunk : Buffer = cipher.update(data);
-      const secondChunk : Buffer = cipher.final();
-      const tag : Buffer = cipher.getAuthTag();
-      return Buffer
-            .concat([firstChunk, secondChunk, tag, initializationVector])
-            .toString('base64');
-    }
-    // decrypt data with cipher's fixed public key
-    static decryptDataShared = async (privateKeyHexB : string, 
-      publicKeyHexA: string, encryptedDataSharedStr: string)
-    : Promise<string> => {
-      const encryptedDataShared : Buffer = Buffer.from(encryptedDataSharedStr, 'base64');
-      const sharedKey : Buffer = await eccrypto.derive(
-        Buffer.from(privateKeyHexB, 'hex'), 
-        Buffer.from(publicKeyHexA, 'hex'));
-      // aes-256-gcm is implemented as symmetric key decryption
-      const initializationVector : Buffer = encryptedDataShared.slice(encryptedDataShared.length-16);
-      const tag : Buffer = encryptedDataShared.slice(encryptedDataShared.length-32, encryptedDataShared.length-16)
-      const encryptedData : Buffer = encryptedDataShared.slice(0, encryptedDataShared.length-32);
-      const decipher : crypto.DecipherGCM = crypto.createDecipheriv(ALGO, sharedKey, initializationVector);
-      decipher.setAuthTag(tag);
-      const firstChunk : Buffer = decipher.update(encryptedData);
-      const secondChunk : Buffer = decipher.final();
-      return Buffer.concat([firstChunk, secondChunk]).toString() as string;
     }
 }
 
