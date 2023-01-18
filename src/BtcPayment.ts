@@ -66,7 +66,7 @@ class BtcPayment {
         };
     }
     static writeOnBtc = async (
-      signer : BtcSigner, messageList : string[], txFee : TxFee) 
+      signer : BtcSigner, messageList : string[], txFee = TxFee.Average) 
     : Promise<string> => {
         // signerUTXO to spend
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
@@ -95,7 +95,7 @@ class BtcPayment {
     }
     // segWitTransfer support 
     static transferBtc = async (
-      signer : BtcSigner, receiverList : BtcReceiver[], txFee : TxFee) 
+      signer : BtcSigner, receiverList : BtcReceiver[], txFee = TxFee.Average) 
     : Promise<string> => {
         // signerUTXO to spend
         const btcRpcUrl : BtcRpcUrl = await this._getSignerNetwork(signer);
