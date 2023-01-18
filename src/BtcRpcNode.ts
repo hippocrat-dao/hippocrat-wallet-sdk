@@ -2,8 +2,6 @@ import fetch from 'cross-fetch';
 import UTXO from './models/UTXO';
 import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
-//const network = BtcRpcUrl.Testnet;
-
 class BtcRpcNode {
     // get single latest utxo of address
     static getUTXOLatest = async (address : string, network : BtcRpcUrl) 
