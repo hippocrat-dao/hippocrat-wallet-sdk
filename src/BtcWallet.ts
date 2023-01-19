@@ -1,8 +1,6 @@
 import * as bip39 from 'bip39';
 import * as bitcoin from 'bitcoinjs-lib';
-import * as ecPair from 'ecpair';
 import * as ecc from 'tiny-secp256k1';
-import wif from 'wif';
 import * as bip32 from 'bip32';
 import * as crypto from 'crypto-browserify';
 import {Buffer} from 'buffer';
@@ -82,17 +80,9 @@ class BtcWallet{
         btcAddressPotential : BtcAccount,
         btcNetwork : BtcNetwork) 
     : Promise<string> => {
-        /* wif stands for Wallet Import Format, 
-           need to encode private key to import wallet */
-        const wifEncodedKey : string = wif.encode(128 as number, 
-            btcAddressPotential.privateKey as Buffer, true as boolean
-        );
-        const keyPair : ecPair.ECPairInterface = ecPair
-        .ECPairFactory(ecc as ecPair.TinySecp256k1Interface)
-        .fromWIF(wifEncodedKey);
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({
-            pubkey: keyPair.publicKey as Buffer,
+            pubkey: btcAddressPotential.publicKey as Buffer,
             network: 
                 btcNetwork === "mainnet" ? 
                 bitcoin.networks.bitcoin
