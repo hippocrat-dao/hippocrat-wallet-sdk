@@ -4,7 +4,6 @@ import * as ecc from 'tiny-secp256k1';
 import * as wif from 'wif';
 import coinSelect from 'coinselect';
 import {Buffer} from 'buffer';
-import * as liquid from 'liquidjs-lib';
 import BtcRpcNode from './BtcRpcNode.js';
 import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';
@@ -34,25 +33,13 @@ class BtcPayment {
         .fromWIF(
             wifEncodedKey
         );
-        // change prefix for liquid
-        if(btcNetwork === 'liquid' || 
-        btcNetwork === 'liquid testnet') {
-          keyPair.network.messagePrefix = "\x18Liquid Signed Message:\n";
-          btcNetwork === 'liquid'?  
-          keyPair.network.bech32 = "ex"
-          : keyPair.network.bech32 = "tex";
-        }
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: keyPair.publicKey as Buffer,
             network: 
                 btcNetwork === "mainnet" ? 
                 bitcoin.networks.bitcoin
-                : btcNetwork === "testnet" ? 
-                bitcoin.networks.testnet
-                : btcNetwork === "liquid" ?
-                liquid.networks.liquid
-                : liquid.networks.testnet as bitcoin.networks.Network
+                : bitcoin.networks.testnet as bitcoin.networks.Network
             });
         // change address to prevent address reuse if you can
         const addressNext : string = addressReuse ? payment.address as string 
@@ -169,12 +156,7 @@ class BtcPayment {
       signer: BtcSigner)
     : Promise<BtcRpcUrl> => {
       return signer.payment.network === bitcoin.networks.bitcoin ?
-      BtcRpcUrl.Mainnet 
-      : signer.payment.network === bitcoin.networks.testnet ? 
-      BtcRpcUrl.Testnet 
-      : signer.payment.network === liquid.networks.liquid ? 
-      BtcRpcUrl.Liquid
-      : BtcRpcUrl.Liquid_Testnet
+      BtcRpcUrl.Mainnet : BtcRpcUrl.Testnet 
     }
 }
 

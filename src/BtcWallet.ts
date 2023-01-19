@@ -7,7 +7,6 @@ import * as bip32 from 'bip32';
 import * as crypto from 'crypto-browserify';
 import {Buffer} from 'buffer';
 import scrypt from 'scrypt-js';
-import * as liquid from 'liquidjs-lib';
 import BtcNetwork from './enums/BtcNetwork';
 import BtcAccount from './models/BtcAccount';
 
@@ -97,11 +96,7 @@ class BtcWallet{
             network: 
                 btcNetwork === "mainnet" ? 
                 bitcoin.networks.bitcoin
-                : btcNetwork === "testnet" ? 
-                bitcoin.networks.testnet
-                : btcNetwork == "liquid" ?
-                liquid.networks.liquid
-                : liquid.networks.testnet as bitcoin.networks.Network 
+                : bitcoin.networks.testnet as bitcoin.networks.Network 
             });
         return payment.address as string;
     }
