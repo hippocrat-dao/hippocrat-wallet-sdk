@@ -17,7 +17,7 @@
     "lightning": "^6.2.7",
     "multiformats": "^10.0.3",
     "scrypt-js": "^3.0.1",
-    "tiny-secp256k1": "^2.2.1",
+    "tiny-secp256k1": "^1.1.6",
     "wif": "^2.0.6"
   },
   "devDependencies": {
