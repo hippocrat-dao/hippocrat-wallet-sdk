@@ -1,7 +1,6 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import * as ecPair from 'ecpair';
 import * as ecc from 'tiny-secp256k1';
-import * as wif from 'wif';
 import coinSelect from 'coinselect';
 import {Buffer} from 'buffer';
 import BtcRpcNode from './BtcRpcNode.js';
@@ -24,15 +23,8 @@ class BtcPayment {
           mnemonic, accountIndex);
         const btcAddressSigner : BtcAccount = await BtcWallet.getAddressFromAccount(
           btcAccount, addressIndex);
-        /* wif stands for Wallet Import Format, 
-           need to encode private key to import wallet */
-        const wifEncodedKey : string = wif.encode(
-            128 as number, btcAddressSigner.privateKey as Buffer, true as boolean
-        );
         const keyPair : ecPair.ECPairInterface = ecPair.ECPairFactory(ecc)
-        .fromWIF(
-            wifEncodedKey
-        );
+        .fromPrivateKey(btcAddressSigner.privateKey as Buffer);
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: keyPair.publicKey as Buffer,
