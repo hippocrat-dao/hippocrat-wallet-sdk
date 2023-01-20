@@ -1,4 +1,5 @@
-import {Network, Signer} from './BtcAccount';
+import {Network} from './BtcAccount';
+import BtcAccount from './BtcAccount';
 
 interface Payment {
     name?: string;
@@ -17,7 +18,7 @@ interface Payment {
     redeem?: Payment;
     witness?: Buffer[];
 }
-
+/*
 interface ECPairInterface extends Signer {
     compressed: boolean;
     network: Network;
@@ -29,9 +30,9 @@ interface ECPairInterface extends Signer {
     verifySchnorr(hash: Buffer, signature: Buffer): boolean;
     signSchnorr(hash: Buffer): Buffer;
 }
-
+*/
 export default interface BtcSigner {
     payment: Payment,
-    keyPair: ECPairInterface,
+    keyPair: BtcAccount,
     addressNext: string // new address for signer(prevent re-use address)
 }
