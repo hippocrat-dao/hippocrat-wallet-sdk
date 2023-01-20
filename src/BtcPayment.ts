@@ -1,6 +1,4 @@
 import * as bitcoin from 'bitcoinjs-lib';
-import * as ecPair from 'ecpair';
-import * as ecc from 'tiny-secp256k1';
 import coinSelect from 'coinselect';
 import {Buffer} from 'buffer';
 import BtcRpcNode from './BtcRpcNode.js';
@@ -23,11 +21,9 @@ class BtcPayment {
           mnemonic, accountIndex);
         const btcAddressSigner : BtcAccount = await BtcWallet.getAddressFromAccount(
           btcAccount, addressIndex);
-        const keyPair : ecPair.ECPairInterface = ecPair.ECPairFactory(ecc)
-        .fromPrivateKey(btcAddressSigner.privateKey as Buffer);
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
-            pubkey: keyPair.publicKey as Buffer,
+            pubkey: btcAddressSigner.publicKey as Buffer,
             network: 
                 btcNetwork === "mainnet" ? 
                 bitcoin.networks.bitcoin
@@ -38,10 +34,9 @@ class BtcPayment {
         : await BtcWallet.generateBtcAddress(
             await BtcWallet.getAddressFromAccount(btcAccount, addressIndex + 1),
           btcNetwork);
-        
         return {
             payment,
-            keyPair,
+            keyPair : btcAddressSigner,
             addressNext
         };
     }
