@@ -7,7 +7,6 @@
     "@trust/keyto": "^1.0.1",
     "bip32": "^3.1.0",
     "bip39": "^3.0.4",
-    "bitcoin-ts": "^1.15.2",
     "bitcoinjs-lib": "^6.0.2",
     "buffer": "^6.0.3",
     "coinselect": "^3.1.13",
