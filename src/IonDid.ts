@@ -1,7 +1,6 @@
 import * as ION from '@decentralized-identity/ion-tools';
 import {Buffer} from 'buffer';
 import * as Secp256k1 from '@noble/secp256k1';
-import keyto from '@trust/keyto';
 import IonService from './models/IonService';
 import IonDidModel from './models/IonDidModel';
 import IonDidResolved from './models/IonDidResolved';
@@ -94,28 +93,19 @@ class IonDid {
   // convert privateJwk to hex
   static privateKeyHexFromJwk = async (privateJwk : JsonWebKey) 
   : Promise<string> => {
-    return keyto
-      .from(
-        {
-          ...privateJwk,
-          crv: 'K-256' as string,
-        },
-        'jwk' as string
-      )
-      .toString('blk' as string, 'private' as string) as string;
+    return Buffer.from(
+      privateJwk.d as string, 'base64url').toString('hex');
   }
-  // convert publicJwk to hex
-  static publicKeyHexFromJwk = async (publicJwk: JsonWebKey) 
+  // convert publicJwk to hex(default conpressed)
+  static publicKeyHexFromJwk = async (publicJwk: JsonWebKey, compressed = true) 
   : Promise<string> => {
-    return keyto
-      .from(
-        {
-          ...publicJwk,
-          crv: 'K-256' as string,
-        },
-        'jwk' as string
-      )
-      .toString('blk' as string, 'public' as string) as string;
+    const pointX = Buffer.from(
+      publicJwk.x as string,'base64url').toString('hex');
+    const pointY = Buffer.from(
+      publicJwk.y as string,'base64url').toString('hex');
+    return compressed? 
+           BigInt("0x" + pointY) % 2n === 0n ? "02" + pointX : "03" + pointX
+           : "04" + pointX + pointY
   };
 
   private static _getDidOpsFromModel = async (did: IonDidModel)
