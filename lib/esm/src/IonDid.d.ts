@@ -13,7 +13,7 @@ declare class IonDid {
     static signMessage: (msg: string, ionPrivateJwk: JsonWebKey) => Promise<string>;
     static verifyMessage: (signedMsg: string, ionPublicJwk: JsonWebKey) => Promise<boolean>;
     static privateKeyHexFromJwk: (privateJwk: JsonWebKey) => Promise<string>;
-    static publicKeyHexFromJwk: (publicJwk: JsonWebKey) => Promise<string>;
+    static publicKeyHexFromJwk: (publicJwk: JsonWebKey, compressed?: boolean) => Promise<string>;
     private static _getDidOpsFromModel;
 }
 export default IonDid;

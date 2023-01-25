@@ -1,5 +1,6 @@
 /// <reference types="node" />
-import { Network, Signer } from './BtcAccount';
+import { Network } from './BtcAccount';
+import BtcAccount from './BtcAccount';
 interface Payment {
     name?: string;
     network?: Network;
@@ -17,20 +18,9 @@ interface Payment {
     redeem?: Payment;
     witness?: Buffer[];
 }
-interface ECPairInterface extends Signer {
-    compressed: boolean;
-    network: Network;
-    lowR: boolean;
-    privateKey?: Buffer;
-    toWIF(): string;
-    tweak(t: Buffer): ECPairInterface;
-    verify(hash: Buffer, signature: Buffer): boolean;
-    verifySchnorr(hash: Buffer, signature: Buffer): boolean;
-    signSchnorr(hash: Buffer): Buffer;
-}
 export default interface BtcSigner {
     payment: Payment;
-    keyPair: ECPairInterface;
+    keyPair: BtcAccount;
     addressNext: string;
 }
 export {};

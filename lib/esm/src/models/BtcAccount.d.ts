@@ -27,6 +27,7 @@ export default interface BtcAccount extends Signer {
     privateKey?: Buffer;
     identifier: Buffer;
     fingerprint: Buffer;
+    compressed?: boolean;
     isNeutered(): boolean;
     neutered(): BtcAccount;
     toBase58(): string;
