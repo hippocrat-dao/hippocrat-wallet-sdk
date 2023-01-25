@@ -1,6 +1,6 @@
 import * as ION from '@decentralized-identity/ion-tools';
+import {Buffer} from 'buffer';
 import * as Secp256k1 from '@noble/secp256k1';
-import { base64url } from 'multiformats/bases/base64';
 import keyto from '@trust/keyto';
 import IonService from './models/IonService';
 import IonDidModel from './models/IonDidModel';
@@ -12,13 +12,12 @@ class IonDid {
   // generateKeyPair with key of btcAccount
   static generateKeyPair = async (ionAccountPotential : BtcAccount)
   : Promise<IonKeyPair> => {
-    const privateKeyBytes = ionAccountPotential.privateKey as Uint8Array;
-    const publicKeyBytes = await Secp256k1.getPublicKey(privateKeyBytes);
-
-    const d : string = base64url.baseEncode(privateKeyBytes);
+    const d : string = (ionAccountPotential.privateKey as Buffer).toString('base64url');
+    const uncompressedPubKey : Buffer = Buffer.from(
+      Secp256k1.getPublicKey(ionAccountPotential.privateKey as Buffer));
     // skip the first byte because it's used as a header to indicate whether the key is uncompressed
-    const x : string = base64url.baseEncode(publicKeyBytes.subarray(1, 33));
-    const y : string = base64url.baseEncode(publicKeyBytes.subarray(33, 65));
+    const x : string = uncompressedPubKey.slice(1, 33).toString('base64url');
+    const y : string = uncompressedPubKey.slice(33, 65).toString('base64url');
 
     const publicJwk = {
       // alg: 'ES256K',
