@@ -9,7 +9,7 @@ describe('get Bitcoin Signer test', () => {
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Mainnet; // Mainnet is default, you don't need to specify actually
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
         const addressIndex : number = 0; // 0 is default, you don't need to specify actually
-        const addressReuse : boolean = true; // false is default, reuse address just for test!
+        const addressReuse : boolean = true; // true is default, BUT DO NOT REUSE ADDRESS IF YOU CAN! 
         // When
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
@@ -29,12 +29,12 @@ describe('write message on bitcoin test', () => {
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet; // Mainnet is default, Testnet for test
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
-        const addressIndex : number = 2; // Let's use sibling address index 2
-        const addressReuse : boolean = true; // false is default, reuse address just for test!
+        const addressIndex : number = 0; // 0 is default, you don't need to specify actually
+        const addressReuse : boolean = true; // true is default, BUT DO NOT REUSE ADDRESS IF YOU CAN! 
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         const message : string = "EiANB7qQmnIUenccT9ch1A3da8NfmmVGto5-oMKly8ruGQ" // ION DID can be written directly on BTC!
-        const txFee : hippocrat.TxFee = hippocrat.TxFee.Average;
+        const txFee : hippocrat.TxFee = hippocrat.TxFee.Average; // Average is default;
         // When
         await hippocrat.BtcPayment.writeOnBtc(btcSigner, [message], txFee); 
         const didTxProcessing : hippocrat.UTXO = await hippocrat.BtcRpcNode.getUTXOLatest(
@@ -52,13 +52,13 @@ describe('bitcoin transfer transaction test', () => {
         const mnemonic : string = "영남 진리 실력 생산 여대생 권리 내일 얼핏 졸업 형제 행사 경비";
         const btcNetwork : hippocrat.BtcNetwork = hippocrat.BtcNetwork.Testnet; // Mainnet is default, Testnet for test
         const accountIndex : number = 0; // 0 is default, you don't need to specify actually
-        const addressIndex : number = 2; // Let's use sibling address index 2, for example
-        const addressReuse : boolean = true; // false is default, reuse address just for test!
+        const addressIndex : number = 0; // 0 is default, you don't need to specify actually
+        const addressReuse : boolean = true; // true is default, BUT DO NOT REUSE ADDRESS IF YOU CAN! 
         const btcSigner : hippocrat.BtcSigner = await hippocrat.BtcPayment.getBtcSigner(
             mnemonic, btcNetwork, accountIndex, addressIndex, addressReuse);
         const toAddress : string = "tb1q8twvf4zp5g0c3yudvl0a3hrktz0k5y3l4l4764";
         const transferAmount : number = 2;
-        const txFee : hippocrat.TxFee = hippocrat.TxFee.Average;
+        const txFee : hippocrat.TxFee = hippocrat.TxFee.Average; // Average is default;
         // When
         await hippocrat.BtcPayment.transferBtc(btcSigner, 
             [{

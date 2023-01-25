@@ -149,7 +149,7 @@ describe('converter test for ION json web key pair->hex key pair', () => {
         const publicKeyHex : string = await hippocrat.IonDid.publicKeyHexFromJwk(ionJwkPair.publicJwk);
         // Then
         assert.strictEqual(privateKeyHex, ionAccountPotential.privateKey?.toString('hex'));
-        assert.strictEqual(publicKeyHex.slice(2, 66), ionAccountPotential.publicKey.toString('hex').slice(2));
+        assert.strictEqual(publicKeyHex, ionAccountPotential.publicKey.toString('hex'));
     })
 })
 
