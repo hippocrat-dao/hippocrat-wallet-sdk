@@ -125,7 +125,7 @@ class BtcPayment {
       psbt : bitcoin.Psbt)
     : Promise<string> => {
       psbt.signAllInputs(
-        signer.keyPair as ecPair.ECPairInterface
+        signer.keyPair as BtcAccount
       );
 
       psbt.finalizeAllInputs() as bitcoin.Psbt;
