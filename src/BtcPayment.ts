@@ -1,15 +1,15 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import coinSelect from 'coinselect';
 import {Buffer} from 'buffer';
-import BtcRpcNode from './BtcRpcNode.js';
-import BtcSigner from './models/BtcSigner.js';
-import BtcReceiver from './models/BtcReceiver.js';
-import UTXO from './models/UTXO.js';
-import BtcNetwork from './enums/BtcNetwork.js';
-import BtcRpcUrl from './enums/BtcRpcUrl.js';
-import BtcAccount from './models/BtcAccount.js';
-import TxFee from './enums/TxFee.js';
-import BtcWallet from './BtcWallet.js';
+import BtcRpcNode from './BtcRpcNode';
+import BtcSigner from './models/BtcSigner';
+import BtcReceiver from './models/BtcReceiver';
+import UTXO from './models/UTXO';
+import BtcNetwork from './enums/BtcNetwork';
+import BtcRpcUrl from './enums/BtcRpcUrl';
+import BtcAccount from './models/BtcAccount';
+import TxFee from './enums/TxFee';
+import BtcWallet from './BtcWallet';
 
 class BtcPayment {
     // Account to pay transaction
