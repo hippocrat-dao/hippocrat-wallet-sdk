@@ -78,7 +78,7 @@ class BtcWallet{
     // get compressed pubkey in BTC network
     static generateBtcAddress = async (
         btcAddressPotential : BtcAccount,
-        btcNetwork : BtcNetwork) 
+        btcNetwork : BtcNetwork = BtcNetwork.Mainnet) 
     : Promise<string> => {
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({
