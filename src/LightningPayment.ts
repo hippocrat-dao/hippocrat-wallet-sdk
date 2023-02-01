@@ -1,95 +1,51 @@
-import * as lightning from 'lightning';
-import LightningAuth from '../src/models/LightningAuth';
+import * as bolt11 from 'bolt11';
+import {crypto} from 'bitcoinjs-lib';
+import { Buffer } from 'buffer';
 
 class LightningPayment {
 
-  static getLNDAdmin = async (lndAuth : LightningAuth)
-  :Promise<lightning.AuthenticatedLnd> => {
-    
-    const { lnd } = lightning.authenticatedLndGrpc({
-      cert: lndAuth.cert,
-      macaroon: lndAuth.macaroon,
-      socket: lndAuth.socket,
-    } as LightningAuth);
-    // lnd is necessry arg for most of methods
-    return lnd as lightning.AuthenticatedLnd;
-  }
-
-  static getLNDUser = async (
-    lndAuth : lightning.LndAuthentication,
-    password: string)
-  :Promise<lightning.AuthenticatedLnd> => {
-
-    const { lnd: lndWithoutMacaroon } = lightning.unauthenticatedLndGrpc(lndAuth);
-
-    const { seed } = await lightning.createSeed({lnd: lndWithoutMacaroon});
-
-    const macaroon : any = await lightning.createWallet(
-      {lnd: lndWithoutMacaroon, seed, password});
-    
-    const { lnd } =  lightning.authenticatedLndGrpc({
-      ...lndAuth,
-      macaroon
-    })
-    // lnd is necessry arg for most of methods
-    return lnd as lightning.AuthenticatedLnd;
-  }
-
-  static getLNDWalletInfo = async (lnd: lightning.AuthenticatedLnd)
-  :Promise<lightning.GetWalletInfoResult> => {
-    const wallet : lightning.GetWalletInfoResult = await lightning.getWalletInfo({lnd});
-    // wallet of lnd
-    return wallet;
-  }
-
-  static createChannel =  async (
-    lnd: lightning.AuthenticatedLnd, publicKey: string, channelSize: number)
-  :Promise<lightning.OpenChannelResult> => {
-    /*
-      AdminPublicKey = "029a566b8195283ebf34b10ee3e4b687ab618c1a7856a29dd58ba12a63abba7518";
-      channelSize must be >= 1000000;
-    */
-    const channel : lightning.OpenChannelResult = await lightning.openChannel(
-      {lnd, local_tokens: channelSize, partner_public_key: publicKey});
-
-    return channel;
-  }
-
-  static closeChannel = async(
-    lnd: lightning.AuthenticatedLnd,
-    channel: lightning.OpenChannelResult)
-  : Promise<lightning.CloseChannelResult> => {
-
-    const closedChannel : lightning.CloseChannelResult = await lightning.closeChannel({
-      lnd, ...channel
-    })
-
-    return closedChannel;
-  }
-
   static requestPayment = async (
-    lnd: lightning.AuthenticatedLnd,
-    amount: number)
-  :Promise<lightning.CreateInvoiceResult> => {
+    privKey: string,
+    amount: number,
+    preimage: string,
+    btcAddress: string,
+    paymentSecret: string
+    )
+  : Promise<any> => {
     /*
-      there's no "address" in lightning network
-      only way to transfer is by creating invoice,
-      which expires in 72 hours
+      There's no "address" in lightning network.
+      Pay to lightning node pubic key.
+      Only way to receive satoshi is by creating invoice.
     */
-    const invoice : lightning.CreateInvoiceResult = await lightning.createInvoice({
-      lnd, tokens: amount});
-    // invoice to show client
-    return invoice;
-  }
+    const encoded : bolt11.PaymentRequestObject = bolt11.encode({
+      satoshis: amount,
+      tags: [
+          {
+              tagName: "description",
+              data: "heartbit reward"
+          },
+          {
+              tagName: "payment_hash",
+              data: crypto.sha256(Buffer.from(preimage)).toString('hex') // hash of preimage(32 random bytes)
+          },
+          {
+              tagName: "fallback_address",
+              data: {
+                  address: btcAddress
+              }
+          },
+          {
+              tagName: "payment_secret",
+              data: paymentSecret, // Make sure the amount the sender intends to pay is actually received by the recipient.
+          },
+          {
+              tagName: 'min_final_cltv_expiry',
+              data: 18 // 18 is default 
+          }
+      ]
+    } as bolt11.PaymentRequestObject)
 
-  static makePayment = async (
-    lnd: lightning.AuthenticatedLnd,
-    invoice: lightning.CreateInvoiceResult)
-  :Promise<lightning.PayResult> => {
-    
-    const paymentReceipt : lightning.PayResult = await lightning.pay({lnd, request: invoice.request});
-    
-    return paymentReceipt;
+    return bolt11.sign(encoded, privKey);
   }
 
 }
