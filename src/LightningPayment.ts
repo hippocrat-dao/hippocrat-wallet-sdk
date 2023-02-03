@@ -1,6 +1,7 @@
 import * as bolt11 from 'bolt11';
 import {crypto} from 'bitcoinjs-lib';
 import { Buffer } from 'buffer';
+import BOLT11 from './models/BOLT11';
 
 class LightningPayment {
 
@@ -11,13 +12,13 @@ class LightningPayment {
     btcAddress: string,
     paymentSecret: string
     )
-  : Promise<any> => {
+  : Promise<BOLT11> => {
     /*
       There's no "address" in lightning network.
       Pay to lightning node pubic key.
       Only way to receive satoshi is by creating invoice.
     */
-    const encoded : bolt11.PaymentRequestObject = bolt11.encode({
+    const encoded : BOLT11 = bolt11.encode({
       satoshis: amount,
       tags: [
           {
@@ -43,9 +44,9 @@ class LightningPayment {
               data: 18 // 18 is default 
           }
       ]
-    } as bolt11.PaymentRequestObject)
+    } as BOLT11)
 
-    return bolt11.sign(encoded, privKey);
+    return bolt11.sign(encoded, privKey) as BOLT11;
   }
 
 }
