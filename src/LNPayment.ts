@@ -3,9 +3,9 @@ import {crypto} from 'bitcoinjs-lib';
 import { Buffer } from 'buffer';
 import BOLT11 from './models/BOLT11';
 
-class LightningPayment {
+class LNPayment {
 
-  static requestPayment = async (
+  static createInvoice = async (
     privKey: string,
     amount: number,
     preimage: string,
@@ -51,4 +51,4 @@ class LightningPayment {
 
 }
 
-export default LightningPayment;
+export default LNPayment;
