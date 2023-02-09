@@ -18,6 +18,11 @@ class BtcWallet{
         const mnemonic : string = bip39.generateMnemonic();
         return mnemonic;
     }
+    // Mnemonic valid for bip39 wallet?
+    static isMnemonicValid = async (mnemonic : string) 
+    : Promise<boolean> => {
+        return bip39.validateMnemonic(mnemonic);
+    }
     // derive child account from BTC HD wallet
     static getAccountFromMnemonic = async (mnemonic : string, index = 0)
     : Promise<BtcAccount> => {
