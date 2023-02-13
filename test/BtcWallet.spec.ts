@@ -6,9 +6,9 @@ describe('Mnemonic generator test', () => {
     it('should return 12 words mnemonic', async() => {
         // When
         const mnemonic : string = await hippocrat.BtcWallet.generateWalletMnemonic();
-        const mnemonicArr : string[] = mnemonic.split(" ");
+        const isvalid : boolean = await hippocrat.BtcWallet.isMnemonicValid(mnemonic);
         // Then
-        assert.strictEqual(mnemonicArr.length, 12);
+        assert.strictEqual(isvalid, true);
     })
 })
 
