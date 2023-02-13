@@ -3,7 +3,7 @@ import BtcWallet from "./src/BtcWallet";
 import BtcRpcNode from "./src/BtcRpcNode";
 import IonDid from "./src/IonDid";
 import RareData from "./src/RareData";
-import LightningPayment from "./src/LightningPayment";
+import LNPayment from "./src/LNPayment";
 import BtcNetwork from "./src/enums/BtcNetwork";
 import BtcRpcUrl from "./src/enums/BtcRpcUrl";
 import TxFee from "./src/enums/TxFee";
@@ -15,9 +15,9 @@ import IonDidResolved from "./src/models/IonDidResolved";
 import IonService from "./src/models/IonService";
 import IonKeyPair from "./src/models/IonKeyPair";
 import UTXO from "./src/models/UTXO";
-import LightningAuth from "./src/models/LightningAuth";
+import BOLT11 from "./src/models/BOLT11";
 
-export { BtcPayment, BtcWallet, BtcRpcNode, IonDid, RareData, LightningPayment };
+export { BtcPayment, BtcWallet, BtcRpcNode, RareData, LNPayment, IonDid };
 export { BtcNetwork, BtcRpcUrl, TxFee };
-export { BtcAccount, BtcReceiver, BtcSigner, IonDidModel, 
-    IonDidResolved, IonService, IonKeyPair, UTXO, LightningAuth};
+export { BtcAccount, BtcReceiver, BtcSigner, UTXO, BOLT11,
+         IonDidModel, IonDidResolved, IonService, IonKeyPair};
