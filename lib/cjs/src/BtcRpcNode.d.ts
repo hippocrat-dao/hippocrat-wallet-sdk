@@ -1,5 +1,5 @@
 import UTXO from './models/UTXO';
-import BtcRpcUrl from './enums/BtcRpcUrl.js';
+import BtcRpcUrl from './enums/BtcRpcUrl';
 declare class BtcRpcNode {
     static getUTXOLatest: (address: string, network: BtcRpcUrl) => Promise<UTXO>;
     static getUTXOList: (address: string, network: BtcRpcUrl) => Promise<UTXO[]>;

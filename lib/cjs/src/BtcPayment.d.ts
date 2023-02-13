@@ -1,7 +1,7 @@
-import BtcSigner from './models/BtcSigner.js';
-import BtcReceiver from './models/BtcReceiver.js';
-import BtcNetwork from './enums/BtcNetwork.js';
-import TxFee from './enums/TxFee.js';
+import BtcSigner from './models/BtcSigner';
+import BtcReceiver from './models/BtcReceiver';
+import BtcNetwork from './enums/BtcNetwork';
+import TxFee from './enums/TxFee';
 declare class BtcPayment {
     static getBtcSigner: (mnemonic: string, btcNetwork?: BtcNetwork, accountIndex?: number, addressIndex?: number, addressReuse?: boolean) => Promise<BtcSigner>;
     static writeOnBtc: (signer: BtcSigner, messageList: string[], txFee?: TxFee) => Promise<string>;
