@@ -4,7 +4,7 @@ import BtcRpcUrl from './enums/BtcRpcUrl';
 
 class BtcRpcNode {
     // get single latest utxo of address
-    static getUTXOLatest = async (address : string, network : BtcRpcUrl) 
+    static getUTXOLatest = async (address : string, network : BtcRpcUrl = BtcRpcUrl.Mainnet) 
     : Promise<UTXO> => {
         const path : string = "address/" + address + "/utxo";
         const res = await fetch(
@@ -19,7 +19,7 @@ class BtcRpcNode {
         return (await res.json()).at(-1) as UTXO;
     }
     // get utxo list of address
-    static getUTXOList = async (address : string, network : BtcRpcUrl) 
+    static getUTXOList = async (address : string, network : BtcRpcUrl = BtcRpcUrl.Mainnet) 
     : Promise<UTXO[]> => {
         const path : string = "address/" + address + "/utxo";
         const res = await fetch(
@@ -34,7 +34,7 @@ class BtcRpcNode {
         return (await res.json()) as UTXO[];
     }
     // broadcast transaction to network
-    static broadcastTx = async (txHex : string, network : BtcRpcUrl) 
+    static broadcastTx = async (txHex : string, network : BtcRpcUrl = BtcRpcUrl.Mainnet) 
     : Promise<string> => {
         const path : string = "tx" ;
         const res = await fetch(
