@@ -103,7 +103,7 @@ class BtcWallet{
         // get scrypt derived key from password
         const N = 2 ** 14; // The CPU/memory cost; increases the overall difficulty
         const r = 8; // The block size; increases the dependency on memory latency and bandwidth
-        const p = 1; // The parallelization cost; increases the dependency on multi-processing
+        const p = 8; // The parallelization cost; increases the dependency on multi-processing
         const dkLen = 32; // digested key length
         const scryptKey : Uint8Array  = await scrypt.scrypt(
             Buffer.from(password, 'utf-8'), 
@@ -139,7 +139,7 @@ class BtcWallet{
         // get scrypt derived key from password
         const N = 2 ** 14; // The CPU/memory cost; increases the overall difficulty
         const r = 8; // The block size; increases the dependency on memory latency and bandwidth
-        const p = 1; // The parallelization cost; increases the dependency on multi-processing
+        const p = 8; // The parallelization cost; increases the dependency on multi-processing
         const dkLen = 32; // digested key length
         const scryptKey : Uint8Array  = await scrypt.scrypt(
             Buffer.from(password, 'utf-8'), 
