@@ -9,6 +9,7 @@
 - make transaction on Bitcoin either to transfer Bitcoin or write data on Bitcoin
 - create Lightning invoice with Bitcoin private key (following bolt11)
 - encrypt and decrypt data with Bitcoin key pair (following ECIES)
+- create Hippocrat(HPO) DID from Bitcoin mnemonic
 
 ...and more!
 
