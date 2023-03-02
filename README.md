@@ -44,6 +44,10 @@ Will be published on NPM soon! You can clone and install to use for now.
 
 - [encrypt & decrypt data following ECIES(AES-GCM with ECDH derived key)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/RareData.spec.ts#L5)
 
+## HpoDid
+
+- [create HPO DID](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/HpoDid.spec.ts#L5)
+
 ## IonDid(For Node and Browser only)
 
 - [generate ION key pair from BTC account, based on secp256k1](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L5)
