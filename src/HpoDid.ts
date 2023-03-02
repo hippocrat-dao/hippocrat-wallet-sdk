@@ -15,9 +15,9 @@ class HpoDid{
             'verificationMethod': [
                 {
                     'id': 'did:hpo:' + HpoDid.publicKey.toString('hex'),
-                    'type': 'did:hpo:' + 'EcdsaSecp256k1VerificationKey2019' as 'EcdsaSecp256k1VerificationKey2019',
+                    'type': 'EcdsaSecp256k1VerificationKey2019' as 'EcdsaSecp256k1VerificationKey2019',
                     'controller': 'did:hpo:' + HpoDid.publicKey.toString('hex'),
-                    'publicKeyHex': 'did:hpo:' + HpoDid.publicKey.toString('hex')
+                    'publicKeyHex': HpoDid.publicKey.toString('hex')
                 }
             ]
         }
