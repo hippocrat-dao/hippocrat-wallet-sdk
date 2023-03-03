@@ -39,12 +39,12 @@ class BtcWallet{
         return child;
     }
     // Address is used for receiving and sending BTC
-    static getAddressFromAccount = async (parentAccount : BtcAccount, index = 0)
+    static getAddressFromAccount = async (parentAccount : BtcAccount, change = 0, index = 0)
     : Promise<BtcAccount> => {
         // derived child address from parentAccount
         const child : bip32.BIP32Interface = parentAccount
-            .deriveHardened(0 as number) // for external use only
-            .deriveHardened(index as number) // address to use
+            .derive(change as number) // external use default
+            .derive(index as number) // address to use
         // child has 32 bytes private key, used for btc address private key directly
         return child;
     }
@@ -53,13 +53,13 @@ class BtcWallet{
     : Promise<BtcAccount> => {
         // derived child account from parentAddress
         const child : bip32.BIP32Interface = parentAddress
-            .deriveHardened(index as number) // address to use
+            .deriveHardened(index as number) // when deeper than BIP44 scope, let's harden for security
         // child has 32 bytes private key, used for btc wallet private key directly
         return child;
     }
     /* 
-    Used for various purpose(ex) IonDid, RareData) where elliptic curve required,
-    seperated from BTC accounts & addresses for security reasons,
+    Used for various purpose(ex) Hippocrat DID, RareData) where elliptic curve required,
+    seperated(while deriveHardened) from BTC accounts & addresses for security reasons,
     while using same mnemoinc.
     Directly get non-btc purpose account from mnemonic easily!
     */
@@ -73,9 +73,9 @@ class BtcWallet{
             .deriveHardened(44 as number) // purpose
             .deriveHardened(0 as number) // coin type
             .deriveHardened(0 as number) // account
-            .deriveHardened(0 as number) // for external use only
-            .deriveHardened(0 as number) // address to use
-            .deriveHardened(purpose as number) // ex) ION = 0, RareData = 1
+            .derive(0 as number) // for external use only
+            .derive(0 as number) // address to use
+            .deriveHardened(purpose as number) // ex) HippocratDID = 0, IonDID = 1
             .deriveHardened(index as number); // account to use
         // child has 32 bytes private key of EC, used for various purposes
         return child;
