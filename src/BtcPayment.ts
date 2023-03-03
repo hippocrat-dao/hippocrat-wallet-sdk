@@ -15,12 +15,12 @@ class BtcPayment {
     // Account to pay transaction
     static getBtcSigner = async (
       mnemonic : string, btcNetwork : BtcNetwork = BtcNetwork.Mainnet, 
-      accountIndex = 0, addressIndex = 0, addressReuse = true)
+      accountIndex = 0, changeIndex = 0, addressIndex = 0, addressReuse = true)
     : Promise<BtcSigner> => {
         const btcAccount : BtcAccount = await BtcWallet.getAccountFromMnemonic(
           mnemonic, accountIndex);
         const btcAddressSigner : BtcAccount = await BtcWallet.getAddressFromAccount(
-          btcAccount, 0, addressIndex);
+          btcAccount, changeIndex, addressIndex);
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: btcAddressSigner.publicKey as Buffer,
@@ -32,7 +32,7 @@ class BtcPayment {
         // change address to prevent address reuse if you can
         const addressNext : string = addressReuse ? payment.address as string 
         : await BtcWallet.generateBtcAddress(
-            await BtcWallet.getAddressFromAccount(btcAccount, addressIndex + 1),
+            await BtcWallet.getAddressFromAccount(btcAccount, changeIndex + 1, addressIndex),
           btcNetwork);
         return {
             payment,
