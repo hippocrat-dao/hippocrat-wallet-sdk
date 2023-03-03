@@ -32,7 +32,7 @@ class BtcWallet{
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
         // derived child account from hd(to manage BTC)
         const child : bip32.BIP32Interface = root
-            .deriveHardened(44 as number) // purpose
+            .deriveHardened(84 as number) // purpose
             .deriveHardened(0 as number) // coin type
             .deriveHardened(index as number); // account
         // child has 32 bytes private key
@@ -70,7 +70,7 @@ class BtcWallet{
         const root : bip32.BIP32Interface = bip32.BIP32Factory(
             ecc as bip32.TinySecp256k1Interface).fromSeed(seed)
         const child : bip32.BIP32Interface = root
-            .deriveHardened(44 as number) // purpose
+            .deriveHardened(84 as number) // purpose
             .deriveHardened(0 as number) // coin type
             .deriveHardened(0 as number) // account
             .derive(0 as number) // for external use only
