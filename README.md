@@ -1,11 +1,11 @@
 # hippocrat-wallet-sdk
 
-**Bitcoin, Lightning, DID and Data Wallet SDK for Node, Browser and Mobile**
+**Bitcoin, Lightning, Hippocrat DID and Data Wallet SDK for Node, Browser and Mobile**
 
 *Easy Peasy Lemon Squeezy to Use. Including*
 
 - generate, encrypt and decrypt mnemonic (following bip39)
-- derive account, address, and child of address (following bip32 and bip44)
+- derive account, address, and child of address (following bip32, bip44 and bip84)
 - make transaction on Bitcoin either to transfer Bitcoin or write data on Bitcoin
 - create Lightning invoice with Bitcoin private key (following bolt11)
 - encrypt and decrypt data with Bitcoin key pair (following ECIES)
@@ -21,13 +21,13 @@ Will be published on NPM soon! You can clone and install to use for now.
 
 - [generate HD wallet mnemonic](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L5)
 
-- [derive Bitcoin account level Account From mnemonic (BIP44[m/44/0/account_index])](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L15)
+- [derive Bitcoin account level Account From mnemonic (BIP84[m/84'/0'/account_index'])](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L15)
 
-- [derive Bitcoin address level Account From Bitcoin account (BIP44[m/44/0/account_index/0/address_index])](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L27)
+- [derive Bitcoin address level Account From Bitcoin account (BIP84[m/84'/0'/account_index'/change_index/address_index])](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L27)
 
 - [generate Bitcoin address string from Bitcoin Account (Segwit, starting from "bc1")](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L40)
 
-- [encrypt & decrypt mnemonic to generate secure vault(scrypt & aes)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L55)
+- [encrypt & decrypt mnemonic to generate secure vault (scrypt & aes-gcm)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/BtcWallet.spec.ts#L55)
 
 ## BtcPayment
 
@@ -43,7 +43,7 @@ Will be published on NPM soon! You can clone and install to use for now.
 
 ## RareData
 
-- [encrypt & decrypt data following ECIES(AES-GCM with ECDH derived key)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/RareData.spec.ts#L5)
+- [encrypt & decrypt data following ECIES (AES-GCM with ECDH derived key)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/RareData.spec.ts#L5)
 
 ## HpoDid
 
