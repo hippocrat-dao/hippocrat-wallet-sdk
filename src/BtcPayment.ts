@@ -20,7 +20,7 @@ class BtcPayment {
         const btcAccount : BtcAccount = await BtcWallet.getAccountFromMnemonic(
           mnemonic, accountIndex);
         const btcAddressSigner : BtcAccount = await BtcWallet.getAddressFromAccount(
-          btcAccount, addressIndex);
+          btcAccount, 0, addressIndex);
         // latest version: SegWit
         const payment : bitcoin.payments.Payment = bitcoin.payments.p2wpkh({ 
             pubkey: btcAddressSigner.publicKey as Buffer,
