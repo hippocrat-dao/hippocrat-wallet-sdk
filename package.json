@@ -2,7 +2,6 @@
   "name": "hippocrat-wallet-sdk",
   "type": "module",
   "dependencies": {
-    "@decentralized-identity/ion-tools": "^1.0.3",
     "@noble/secp256k1": "^1.7.0",
     "bip32": "^3.1.0",
     "bip39": "^3.0.4",

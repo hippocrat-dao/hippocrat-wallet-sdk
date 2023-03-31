@@ -2,7 +2,7 @@
 
 **Bitcoin, Lightning, Hippocrat DID and Data Wallet SDK for Node, Browser and Mobile**
 
-*Easy Peasy Lemon Squeezy to Use. Including*
+_Easy Peasy Lemon Squeezy to Use. Including_
 
 - generate, encrypt and decrypt mnemonic (following bip39)
 - derive account, address, and child of address (following bip32, bip44 and bip84)
@@ -48,19 +48,3 @@ Will be published on NPM soon! You can clone and install to use for now.
 ## HpoDid
 
 - [create HPO DID](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/HpoDid.spec.ts#L5)
-
-## IonDid(For Node and Browser only)
-
-- [generate ION key pair from BTC account, based on secp256k1](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L5)
-
-- [create ION DID instance to anchor](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L22)
-
-- [get ION DID uri(long&short)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L56)
-
-- [anchor ION DID on ION node(will later be published on BTC)](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L92)
-
-- [get resolved(either anchored on ION or published on BTC) ION DID](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L126)
-
-- [convert json web key to hex key format](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L140)
-
-- [sign & verify message with ION DID](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/IonDid.spec.ts#L156)

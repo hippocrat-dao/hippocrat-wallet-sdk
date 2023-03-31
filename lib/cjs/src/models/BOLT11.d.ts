@@ -1,4 +1,4 @@
-declare type RoutingInfo = Array<{
+type RoutingInfo = Array<{
     pubkey: string;
     short_channel_id: string;
     fee_base_msat: number;
@@ -43,7 +43,7 @@ interface UnknownTag {
     tagCode: number;
     words: string;
 }
-declare type TagData = string | number | RoutingInfo | FallbackAddress | FeatureBits | UnknownTag;
+type TagData = string | number | RoutingInfo | FallbackAddress | FeatureBits | UnknownTag;
 export default interface BOLT11 {
     paymentRequest?: string;
     complete?: boolean;
