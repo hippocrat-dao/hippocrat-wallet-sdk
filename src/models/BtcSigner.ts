@@ -1,22 +1,22 @@
-import {Network} from './BtcAccount';
+import { Network } from './BtcAccount';
 import BtcAccount from './BtcAccount';
 
 interface Payment {
-    name?: string;
-    network?: Network;
-    output?: Buffer;
-    data?: Buffer[];
-    m?: number;
-    n?: number;
-    pubkeys?: Buffer[];
-    input?: Buffer;
-    signatures?: Buffer[];
-    pubkey?: Buffer;
-    signature?: Buffer;
-    address?: string;
-    hash?: Buffer;
-    redeem?: Payment;
-    witness?: Buffer[];
+  name?: string;
+  network?: Network;
+  output?: Buffer;
+  data?: Buffer[];
+  m?: number;
+  n?: number;
+  pubkeys?: Buffer[];
+  input?: Buffer;
+  signatures?: Buffer[];
+  pubkey?: Buffer;
+  signature?: Buffer;
+  address?: string;
+  hash?: Buffer;
+  redeem?: Payment;
+  witness?: Buffer[];
 }
 /*
 interface ECPairInterface extends Signer {
@@ -32,7 +32,7 @@ interface ECPairInterface extends Signer {
 }
 */
 export default interface BtcSigner {
-    payment: Payment,
-    keyPair: BtcAccount,
-    addressNext: string // new address for signer(prevent re-use address)
+  payment: Payment;
+  keyPair: BtcAccount;
+  addressNext: string; // new address for signer(prevent re-use address)
 }

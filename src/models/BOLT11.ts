@@ -9,9 +9,9 @@ interface FallbackAddress {
   code: number;
   address: string;
   addressHash: string;
-};
+}
 interface FeatureBits {
-  word_length: number; 
+  word_length: number;
   option_data_loss_protect?: Feature;
   initial_routing_sync?: Feature;
   option_upfront_shutdown_script?: Feature;
@@ -31,19 +31,25 @@ interface FeatureBits {
 interface Feature {
   required?: boolean;
   supported?: boolean;
-};
+}
 interface Network {
   [index: string]: any;
   bech32: string;
   pubKeyHash: number;
   scriptHash: number;
   validWitnessVersions: number[];
-};
+}
 interface UnknownTag {
   tagCode: number;
   words: string;
-};
-type TagData = string | number | RoutingInfo | FallbackAddress | FeatureBits | UnknownTag;
+}
+type TagData =
+  | string
+  | number
+  | RoutingInfo
+  | FallbackAddress
+  | FeatureBits
+  | UnknownTag;
 interface TagsObject {
   payment_hash?: string;
   payment_secret?: string;
@@ -56,7 +62,7 @@ interface TagsObject {
   routing_info?: RoutingInfo;
   feature_bits?: FeatureBits;
   unknownTags?: UnknownTag[];
-};
+}
 export default interface BOLT11 {
   paymentRequest?: string;
   complete?: boolean;
@@ -76,4 +82,4 @@ export default interface BOLT11 {
     tagName: string;
     data: TagData;
   }>;
-};
+}
