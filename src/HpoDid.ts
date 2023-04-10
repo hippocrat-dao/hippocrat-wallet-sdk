@@ -15,16 +15,17 @@ class HpoDid {
       purpose,
       index,
     );
+    const publicKeyHex: string = HpoDid.publicKey.toString('hex');
     // HpoDid document
     const HpoDidDocument: HpoDidModel = {
       '@context': 'https://www.w3.org/ns/did/v1',
-      id: 'did:hpo:' + HpoDid.publicKey.toString('hex'),
+      id: 'did:hpo:' + publicKeyHex,
       verificationMethod: [
         {
-          id: 'did:hpo:' + HpoDid.publicKey.toString('hex'),
+          id: 'did:hpo:' + publicKeyHex,
           type: 'EcdsaSecp256k1VerificationKey2019' as const,
-          controller: 'did:hpo:' + HpoDid.publicKey.toString('hex'),
-          publicKeyHex: HpoDid.publicKey.toString('hex'),
+          controller: 'did:hpo:' + publicKeyHex,
+          publicKeyHex,
         },
       ],
     };
