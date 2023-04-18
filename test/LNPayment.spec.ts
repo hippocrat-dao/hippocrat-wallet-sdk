@@ -23,8 +23,9 @@ describe('LNPayment create invoice test', () => {
 			(LNSigner.privateKey as Buffer).toString('hex'),
 			1, // satoshi to request
 			'preimage', // preimage to reveal(must be 32 random bytes)
-			btcAddressString, // fallback btc address
 			'paymentSecret', // paymentSecret to reveal(must be 32 random bytes)
+			'a cup of coffee', // descript of invoice
+			btcAddressString, // fallback btc address
 		);
 		// Then
 		assert.strictEqual(bolt11.payeeNodeKey, LNSigner.publicKey.toString('hex'));
