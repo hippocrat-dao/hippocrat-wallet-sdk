@@ -6,22 +6,23 @@ import BOLT11 from './models/BOLT11';
 class LNPayment {
 	static createInvoice = async (
 		privKey: string,
-		amount: number,
+		satoshi: number,
 		preimage: string,
-		btcAddress: string,
-		paymentSecret: string,
+		paymentSecret: string = '',
+		description: string = '',
+		btcAddress: string = '',
 	): Promise<BOLT11> => {
 		/*
-      There's no "address" in lightning network.
-      Pay to lightning node pubic key.
-      Only way to receive satoshi is by creating invoice.
-    */
+      		There's no "address" in lightning network.
+      		Pay to lightning node pubic key.
+      		Only way to receive satoshi is by creating invoice.
+   		*/
 		const encoded: BOLT11 = bolt11.encode({
-			satoshis: amount,
+			satoshis: satoshi,
 			tags: [
 				{
 					tagName: 'description',
-					data: 'heartbit reward',
+					data: description,
 				},
 				{
 					tagName: 'payment_hash',
