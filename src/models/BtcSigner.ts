@@ -1,5 +1,5 @@
-import { Network } from './BtcAccount';
-import BtcAccount from './BtcAccount';
+import { Network } from './BtcAccount.js';
+import BtcAccount from './BtcAccount.js';
 
 interface Payment {
 	name?: string;

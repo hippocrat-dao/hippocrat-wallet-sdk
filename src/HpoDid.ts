@@ -1,6 +1,6 @@
-import BtcWallet from './BtcWallet';
-import BtcAccount from './models/BtcAccount';
-import HpoDidModel from './models/HpoDidModel';
+import BtcWallet from './BtcWallet.js';
+import BtcAccount from './models/BtcAccount.js';
+import HpoDidModel from './models/HpoDidModel.js';
 
 class HpoDid {
 	// derive HPO DID account from BTC HD wallet mnemonic

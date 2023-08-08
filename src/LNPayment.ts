@@ -1,7 +1,7 @@
 import * as bolt11 from 'bolt11';
 import { crypto } from 'bitcoinjs-lib';
 import { Buffer } from 'buffer';
-import BOLT11 from './models/BOLT11';
+import BOLT11 from './models/BOLT11.js';
 
 class LNPayment {
 	static createInvoice = async (

@@ -5,8 +5,8 @@ import * as bip32 from 'bip32';
 import * as crypto from 'crypto-browserify';
 import { Buffer } from 'buffer';
 import scrypt from 'scrypt-js';
-import BtcNetwork from './enums/BtcNetwork';
-import BtcAccount from './models/BtcAccount';
+import BtcNetwork from './enums/BtcNetwork.js';
+import BtcAccount from './models/BtcAccount.js';
 
 const ALGO: crypto.CipherGCMTypes = 'aes-256-gcm';
 

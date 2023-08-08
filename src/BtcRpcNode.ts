@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch';
-import UTXO from './models/UTXO';
-import BtcRpcUrl from './enums/BtcRpcUrl';
+import UTXO from './models/UTXO.js';
+import BtcRpcUrl from './enums/BtcRpcUrl.js';
 
 class BtcRpcNode {
 	// get single latest utxo of address
