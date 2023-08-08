@@ -1,0 +1,7 @@
+{
+    "name": "hippocrat-wallet-sdk",
+    "scripts": {
+      "test": "c8 --reporter=html --reporter=text --all=true --include=src/*.js mocha test/**/*.js"
+    }
+  }
+  
