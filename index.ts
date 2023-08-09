@@ -8,6 +8,7 @@ import HpoPayment from './src/HpoPayment.js';
 import BtcNetwork from './src/enums/BtcNetwork.js';
 import BtcRpcUrl from './src/enums/BtcRpcUrl.js';
 import TxFee from './src/enums/TxFee.js';
+import MnemonicLang from './src/enums/MnemonicLang.js';
 import BtcAccount from './src/models/BtcAccount.js';
 import BtcReceiver from './src/models/BtcReceiver.js';
 import BtcSigner from './src/models/BtcSigner.js';
@@ -24,5 +25,5 @@ export {
 	HpoDid,
 	HpoPayment,
 };
-export { BtcNetwork, BtcRpcUrl, TxFee };
+export { BtcNetwork, BtcRpcUrl, TxFee, MnemonicLang };
 export { BtcAccount, BtcReceiver, BtcSigner, UTXO, BOLT11, HpoDidModel };

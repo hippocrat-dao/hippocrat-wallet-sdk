@@ -7,18 +7,26 @@ import { Buffer } from 'buffer';
 import scrypt from 'scrypt-js';
 import BtcNetwork from './enums/BtcNetwork.js';
 import BtcAccount from './models/BtcAccount.js';
+import MnemonicLang from './enums/MnemonicLang.js';
 
 const ALGO: crypto.CipherGCMTypes = 'aes-256-gcm';
 
 class BtcWallet {
 	// HD wallet will be for both ion and bitcoin
-	static generateWalletMnemonic = async (): Promise<string> => {
+	static generateWalletMnemonic = async (
+		language = MnemonicLang.ENGLISH,
+	): Promise<string> => {
 		// random mnemonic 12 words generated
+		bip39.setDefaultWordlist(language);
 		const mnemonic: string = bip39.generateMnemonic();
 		return mnemonic;
 	};
 	// Mnemonic valid for bip39 wallet?
-	static isMnemonicValid = async (mnemonic: string): Promise<boolean> => {
+	static isMnemonicValid = async (
+		mnemonic: string,
+		language = MnemonicLang.ENGLISH,
+	): Promise<boolean> => {
+		bip39.setDefaultWordlist(language);
 		return bip39.validateMnemonic(mnemonic);
 	};
 	// derive child account from BTC HD wallet
