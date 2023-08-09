@@ -110,13 +110,14 @@ class BtcWallet {
 	static generateEncryptedVault = async (
 		mnemonic: string,
 		password: string,
+		security?: 'normal' | 'strong',
 	): Promise<string> => {
 		// generate salt
 		const salt: Buffer = crypto.randomBytes(32);
 		// get scrypt derived key from password
-		const N = 2 ** 14; // The CPU/memory cost; increases the overall difficulty
+		const N = security === 'strong' ? 2 ** 14 : 2 ** 12; // The CPU/memory cost; increases the overall difficulty
 		const r = 8; // The block size; increases the dependency on memory latency and bandwidth
-		const p = 8; // The parallelization cost; increases the dependency on multi-processing
+		const p = security === 'strong' ? 8 : 1; // The parallelization cost; increases the dependency on multi-processing
 		const dkLen = 32; // digested key length
 		const scryptKey: Uint8Array = await scrypt.scrypt(
 			Buffer.from(password, 'utf-8'),
@@ -149,6 +150,7 @@ class BtcWallet {
 	static decryptVault = async (
 		encryptedVaultStr: string,
 		password: string,
+		security?: 'normal' | 'strong',
 	): Promise<string> => {
 		const encryptedVault: Buffer = Buffer.from(encryptedVaultStr, 'base64');
 		// seperate mnemonic, salt and iv
@@ -168,9 +170,9 @@ class BtcWallet {
 			encryptedVault.length - 64,
 		);
 		// get scrypt derived key from password
-		const N = 2 ** 14; // The CPU/memory cost; increases the overall difficulty
+		const N = security === 'strong' ? 2 ** 14 : 2 ** 12; // The CPU/memory cost; increases the overall difficulty
 		const r = 8; // The block size; increases the dependency on memory latency and bandwidth
-		const p = 8; // The parallelization cost; increases the dependency on multi-processing
+		const p = security === 'strong' ? 8 : 1; // The parallelization cost; increases the dependency on multi-processing
 		const dkLen = 32; // digested key length
 		const scryptKey: Uint8Array = await scrypt.scrypt(
 			Buffer.from(password, 'utf-8'),
