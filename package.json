@@ -2,11 +2,9 @@
   "name": "hippocrat-wallet-sdk",
   "type": "module",
   "dependencies": {
-    "@noble/secp256k1": "^1.7.0",
     "bip32": "^3.1.0",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^6.0.2",
-    "bolt11": "^1.4.0",
     "buffer": "^6.0.3",
     "coinselect": "^3.1.13",
     "cross-fetch": "^3.1.5",
