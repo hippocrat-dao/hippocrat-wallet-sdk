@@ -48,3 +48,5 @@ Will be published on NPM soon! You can clone and install to use for now.
 ## [HpoDid](https://github.com/hippocrat-protocol/hippocrat-wallet-sdk/blob/develop/test/HpoDid.spec.ts)
 
 - create HPO DID
+- sign message with HPO DID private key
+- verify signed message(signature) with HPO DID public key
