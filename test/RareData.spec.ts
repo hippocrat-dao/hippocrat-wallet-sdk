@@ -6,14 +6,18 @@ describe('ECIES data encrypt/decrypt test', () => {
 	it('data should be same after encrypt-decrypt process', async () => {
 		// Given
 		const mnemonic: string = await hippocrat.BtcWallet.generateWalletMnemonic();
-		const nonBtcAccountPotential: hippocrat.BtcAccount =
-			await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 1, 0);
-		const publicKeyTo: string = (
-			nonBtcAccountPotential.publicKey as Buffer
-		).toString('hex');
-		const privateKey: string = (
-			nonBtcAccountPotential.privateKey as Buffer
-		).toString('hex');
+		const btcAccountPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
+		const btcAddressPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
+		const rareDataAccount: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getChildFromAddress(btcAddressPotential, 0);
+		const publicKeyTo: string = (rareDataAccount.publicKey as Buffer).toString(
+			'hex',
+		);
+		const privateKey: string = (rareDataAccount.privateKey as Buffer).toString(
+			'hex',
+		);
 		const data: string = 'rare data';
 		// When
 		const encryptedData: string = await hippocrat.RareData.encryptData(

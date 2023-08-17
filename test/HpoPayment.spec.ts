@@ -6,11 +6,13 @@ describe('HPO payment test', () => {
 	it('HPO payment is to transfer HPO token', async () => {
 		// Given
 		const mnemonic: string = await hippocrat.BtcWallet.generateWalletMnemonic();
-		const nonBtcAccountPotential: hippocrat.BtcAccount =
-			await hippocrat.BtcWallet.getNonBtcAccountFromMnemonic(mnemonic, 1, 0);
+		const btcAccountPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
+		const btcAddressPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
 		// When
 		const tx = await hippocrat.HpoPayment.transferHpo(
-			nonBtcAccountPotential.privateKey as Buffer,
+			btcAddressPotential.privateKey as Buffer,
 			1,
 			'0x40CB4DA705a044016e66dB2E30AdE93EbFe4abD4', // HPO deployer address
 		);

@@ -72,33 +72,6 @@ class BtcWallet {
 		// child has 32 bytes private key, used for btc wallet private key directly
 		return child;
 	};
-	/* 
-    Used for various purpose(ex) Hippocrat DID, RareData) where elliptic curve required,
-    seperated(while deriveHardened) from BTC accounts & addresses for security reasons,
-    while using same mnemoinc.
-    Directly get non-btc purpose account from mnemonic easily!
-    */
-	static getNonBtcAccountFromMnemonic = async (
-		mnemonic: string,
-		purpose = 0,
-		index = 0,
-	): Promise<BtcAccount> => {
-		const seed: Buffer = await bip39.mnemonicToSeed(mnemonic);
-		// hd wallet(master wallet)
-		const root: bip32.BIP32Interface = bip32
-			.BIP32Factory(ecc as bip32.TinySecp256k1Interface)
-			.fromSeed(seed);
-		const child: bip32.BIP32Interface = root
-			.deriveHardened(84 as number) // purpose
-			.deriveHardened(0 as number) // coin type
-			.deriveHardened(0 as number) // account
-			.derive(0 as number) // for external use only
-			.derive(0 as number) // address to use
-			.deriveHardened(purpose as number) // ex) HippocratDID = 0, IonDID = 1
-			.deriveHardened(index as number); // account to use
-		// child has 32 bytes private key of EC, used for various purposes
-		return child;
-	};
 	// get compressed pubkey in BTC network
 	static generateBtcAddress = async (
 		btcAddressPotential: BtcAccount,
