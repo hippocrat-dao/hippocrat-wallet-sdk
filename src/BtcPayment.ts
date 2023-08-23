@@ -66,27 +66,27 @@ class BtcPayment {
 			signer.payment.address as string,
 			btcRpcUrl,
 		);
-		// need to calculate OP_RETURN(message) bytes to include fee for optimizer in advance
-		const messageListBytes: number =
-			new Blob(messageList).size + messageList.length * 10;
-		// singleTxBytes * txFeeRecal = (singleTxBytes + msgBytes) * txFee
-		const txFeeRecalculated = Math.ceil(
-			((192 /*single tx size*/ + messageListBytes) * txFee) / 192,
-		);
+		/*
+			need to calculate OP_RETURN(message) bytes to include fee
+			+ OP_RETURN(1) + scriptPubKeyLength(1) + nValue(8) for each output
+		*/
+		const additionalFee: number =
+			(new Blob(messageList).size + messageList.length * 10) * txFee;
 		// get optimized transaction
 		const psbt: bitcoin.Psbt = await this._utxoOptimizer(
 			signer,
 			[],
 			signerUTXOList,
-			txFeeRecalculated,
+			txFee,
+			additionalFee,
 		);
-		// data to store for did
+		// data to store
 		messageList.forEach(message => {
 			const data: Buffer = Buffer.from(message, 'utf8');
 			const embed: bitcoin.payments.Payment = bitcoin.payments.embed({
 				data: [data] as Buffer[],
 			});
-			// add OP_RETURN(hippocrat did registry)
+			// add OP_RETURN
 			psbt.addOutput({
 				script: embed.output as Buffer,
 				value: 0 as number,
@@ -123,7 +123,15 @@ class BtcPayment {
 		target: BtcReceiver[],
 		signerUTXOList: UTXO[],
 		txFee: TxFee,
+		additionalFee = 0, // fee to add in case of inaccurate coinselect result(ex) op_return)
 	): Promise<bitcoin.Psbt> => {
+		// witness utxo to calculate correct fee
+		for (let i = 0; i < signerUTXOList.length; i++) {
+			signerUTXOList[i].witnessUtxo = {
+				script: signer.payment.output as Buffer, // scriptPubKey
+				value: signerUTXOList[i].value as number, // UTXO amount
+			};
+		}
 		const feeRate: number = txFee;
 		const selectedUTXO: any = coinSelect(signerUTXOList, target, feeRate);
 		// .inputs and .outputs will be undefined if no solution was found
@@ -148,16 +156,21 @@ class BtcPayment {
 				},
 			} as bitcoin.PsbtTxInput),
 		);
-		selectedUTXO.outputs.forEach((output: any) => {
+		selectedUTXO.outputs.forEach((output: any, idx: number) => {
 			// watch out, outputs may have been added that you need to provide
 			// an output address/script for
 			if (!output.address as boolean) {
 				output.address = signer.addressNext as string;
 			}
-			psbt.addOutput({
-				address: output.address as string,
-				value: output.value as number,
-			} as bitcoin.PsbtTxOutput);
+			idx === selectedUTXO.outputs.length - 1
+				? psbt.addOutput({
+						address: output.address as string,
+						value: output.value - additionalFee,
+				  } as bitcoin.PsbtTxOutput)
+				: psbt.addOutput({
+						address: output.address as string,
+						value: output.value,
+				  } as bitcoin.PsbtTxOutput);
 		});
 		return psbt;
 	};

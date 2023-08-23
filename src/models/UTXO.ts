@@ -8,5 +8,12 @@ export default interface UTXO {
 		block_time: number;
 	};
 	value: number;
+	script?: Buffer;
+	nonWitnessUtxo?: Buffer;
+	witnessUtxo?: {
+		script: Buffer;
+		value: number;
+	};
+	isTaproot?: boolean;
 	asset?: string | Buffer;
 }
