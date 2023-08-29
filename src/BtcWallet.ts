@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39';
 import * as bitcoin from 'bitcoinjs-lib';
-import * as ecc from 'tiny-secp256k1';
+import ecc from '@bitcoinerlab/secp256k1';
 import * as bip32 from 'bip32';
 import scrypt from 'scrypt-js';
 import BtcNetwork from './enums/BtcNetwork.js';
