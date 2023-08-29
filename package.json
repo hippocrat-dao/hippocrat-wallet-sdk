@@ -24,16 +24,16 @@
     "lib"
   ],
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.0.5",
     "@noble/curves": "^1.2.0",
     "aes-js": "^4.0.0-beta.5",
     "bip32": "^4.0.0",
-    "bip39": "^3.0.4",
+    "bip39": "^3.1.0",
     "bitcoinjs-lib": "^6.0.2",
     "coinselect": "^3.1.13",
     "cross-fetch": "^3.1.5",
     "ethers": "^6.7.0",
-    "scrypt-js": "^3.0.1",
-    "tiny-secp256k1": "^1.1.6"
+    "scrypt-js": "^3.0.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.0",
