@@ -13,7 +13,7 @@ describe('HPO DID create test', () => {
 		const hpoDidPotential: hippocrat.BtcAccount =
 			await hippocrat.BtcWallet.getChildFromAddress(btcAddressPotential, 0);
 		const hpoDid: hippocrat.HpoDidModel = await hippocrat.HpoDid.create(
-			hpoDidPotential.privateKey as Buffer,
+			hpoDidPotential.privateKey?.toString('hex') as string,
 		);
 		// When
 		const pubKeyHex: string = hpoDidPotential.publicKey.toString('hex');
@@ -34,12 +34,12 @@ describe('HPO DID sign and verify test', () => {
 		const hpoDidPotential: hippocrat.BtcAccount =
 			await hippocrat.BtcWallet.getChildFromAddress(btcAddressPotential, 0);
 		const hpoDid: hippocrat.HpoDidModel = await hippocrat.HpoDid.create(
-			hpoDidPotential.privateKey as Buffer,
+			hpoDidPotential.privateKey?.toString('hex') as string,
 		);
 		const publicKey: string = hpoDid.id.slice(8);
 		// When
 		const signature: string = await hippocrat.HpoDid.sign(
-			hpoDidPotential.privateKey as Buffer,
+			hpoDidPotential.privateKey?.toString('hex') as string,
 		);
 		const isValidSignature: boolean = await hippocrat.HpoDid.verify(
 			publicKey,

@@ -12,7 +12,7 @@ describe('HPO payment test', () => {
 			await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
 		// When
 		const tx = await hippocrat.HpoPayment.transferHpo(
-			btcAddressPotential.privateKey as Buffer,
+			btcAddressPotential.privateKey?.toString('hex') as string,
 			1,
 			'0x40CB4DA705a044016e66dB2E30AdE93EbFe4abD4', // HPO deployer address
 		);

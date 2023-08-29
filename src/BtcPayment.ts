@@ -1,6 +1,5 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import coinSelect from 'coinselect';
-import { Buffer } from 'buffer';
 import BtcRpcNode from './BtcRpcNode.js';
 import BtcSigner from './models/BtcSigner.js';
 import BtcReceiver from './models/BtcReceiver.js';

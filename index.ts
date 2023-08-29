@@ -12,9 +12,8 @@ import BtcAccount from './src/models/BtcAccount.js';
 import BtcReceiver from './src/models/BtcReceiver.js';
 import BtcSigner from './src/models/BtcSigner.js';
 import UTXO from './src/models/UTXO.js';
-import BOLT11 from './src/models/BOLT11.js';
 import HpoDidModel from './src/models/HpoDidModel.js';
 
 export { BtcPayment, BtcWallet, BtcRpcNode, RareData, HpoDid, HpoPayment };
 export { BtcNetwork, BtcRpcUrl, TxFee, MnemonicLang };
-export { BtcAccount, BtcReceiver, BtcSigner, UTXO, BOLT11, HpoDidModel };
+export { BtcAccount, BtcReceiver, BtcSigner, UTXO, HpoDidModel };

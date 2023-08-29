@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 class HpoPayment {
 	// transfer HPO token
 	static transferHpo = async (
-		privKey: string | Buffer,
+		privKey: string,
 		amount: number,
 		toAddress: string,
 		provider?: any, // if not provided, default provider is used
@@ -11,9 +11,7 @@ class HpoPayment {
 		const rpcNode = provider
 			? provider
 			: ethers.getDefaultProvider('homestead');
-		const privKeyHex =
-			typeof privKey === 'string' ? privKey : privKey.toString('hex');
-		const signer = new ethers.Wallet(privKeyHex, rpcNode);
+		const signer = new ethers.Wallet(privKey, rpcNode);
 		const hpo = new ethers.Contract(HPO_ADDRESS, HPO_ABI, signer);
 		const tx: any = await hpo.transfer(
 			toAddress,

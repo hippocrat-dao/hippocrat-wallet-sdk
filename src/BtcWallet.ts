@@ -2,14 +2,13 @@ import * as bip39 from 'bip39';
 import * as bitcoin from 'bitcoinjs-lib';
 import * as ecc from 'tiny-secp256k1';
 import * as bip32 from 'bip32';
-import * as crypto from 'crypto-browserify';
-import { Buffer } from 'buffer';
 import scrypt from 'scrypt-js';
 import BtcNetwork from './enums/BtcNetwork.js';
 import BtcAccount from './models/BtcAccount.js';
 import MnemonicLang from './enums/MnemonicLang.js';
-
-const ALGO: crypto.CipherGCMTypes = 'aes-256-gcm';
+import { CTR } from 'aes-js';
+import RareData from './RareData.js';
+const crypto = globalThis.crypto;
 
 class BtcWallet {
 	// HD wallet will be for both ion and bitcoin
@@ -93,39 +92,27 @@ class BtcWallet {
 		password: string,
 		security?: 'normal' | 'strong',
 	): Promise<string> => {
-		// generate salt
-		const salt: Buffer = crypto.randomBytes(32);
+		const salt: Uint8Array = crypto.getRandomValues(new Uint8Array(32));
 		// get scrypt derived key from password
 		const N = security === 'strong' ? 2 ** 14 : 2 ** 12; // The CPU/memory cost; increases the overall difficulty
 		const r = 8; // The block size; increases the dependency on memory latency and bandwidth
 		const p = security === 'strong' ? 8 : 1; // The parallelization cost; increases the dependency on multi-processing
 		const dkLen = 32; // digested key length
-		const scryptKey: Uint8Array = await scrypt.scrypt(
-			Buffer.from(password, 'utf-8'),
-			salt,
-			N,
-			r,
-			p,
-			dkLen,
+		const ec = new TextEncoder(); // utf-8 text to Uint8Array
+		const pw: Uint8Array = ec.encode(password);
+		const scryptKey: Uint8Array = await scrypt.scrypt(pw, salt, N, r, p, dkLen);
+
+		// aes-256-ctr is implemented as symmetric key encryption
+		const aesCtr = new CTR(scryptKey);
+		const encryptedMnemonic: Uint8Array = aesCtr.encrypt(ec.encode(mnemonic));
+
+		// convert encryptedVault and salt to hex string
+		const encryptedMnemonicHex: string = await RareData.bytesToHex(
+			encryptedMnemonic,
 		);
-		// aes-256-gcm is implemented as symmetric key encryption
-		const initializationVector: Buffer = crypto.randomBytes(16);
-		const cipher: crypto.CipherGCM = crypto.createCipheriv(
-			ALGO,
-			scryptKey,
-			initializationVector,
-		);
-		const firstChunk: Buffer = cipher.update(mnemonic);
-		const secondChunk: Buffer = cipher.final();
-		const tag = cipher.getAuthTag();
-		const encryptedVault = Buffer.concat([
-			firstChunk,
-			secondChunk,
-			tag,
-			salt,
-			initializationVector,
-		]);
-		return encryptedVault.toString('base64');
+		const saltHex: string = await RareData.bytesToHex(salt);
+
+		return saltHex + encryptedMnemonicHex;
 	};
 	// decrypt mnemonic with password & encryptedMnemonic
 	static decryptVault = async (
@@ -133,46 +120,27 @@ class BtcWallet {
 		password: string,
 		security?: 'normal' | 'strong',
 	): Promise<string> => {
-		const encryptedVault: Buffer = Buffer.from(encryptedVaultStr, 'base64');
-		// seperate mnemonic, salt and iv
-		const initializationVector: Buffer = encryptedVault.slice(
-			encryptedVault.length - 16,
+		// seperate salt and encrypedMnemonic
+		const salt: Uint8Array = await RareData.hexToBytes(
+			encryptedVaultStr.slice(0, 64),
 		);
-		const salt: Buffer = encryptedVault.slice(
-			encryptedVault.length - 48,
-			encryptedVault.length - 16,
+		const encryptedMnemonic: Uint8Array = await RareData.hexToBytes(
+			encryptedVaultStr.slice(64),
 		);
-		const tag: Buffer = encryptedVault.slice(
-			encryptedVault.length - 64,
-			encryptedVault.length - 48,
-		);
-		const encryptedMnemonic: Buffer = encryptedVault.slice(
-			0,
-			encryptedVault.length - 64,
-		);
+
 		// get scrypt derived key from password
 		const N = security === 'strong' ? 2 ** 14 : 2 ** 12; // The CPU/memory cost; increases the overall difficulty
 		const r = 8; // The block size; increases the dependency on memory latency and bandwidth
 		const p = security === 'strong' ? 8 : 1; // The parallelization cost; increases the dependency on multi-processing
 		const dkLen = 32; // digested key length
-		const scryptKey: Uint8Array = await scrypt.scrypt(
-			Buffer.from(password, 'utf-8'),
-			salt,
-			N,
-			r,
-			p,
-			dkLen,
-		);
-		// aes-256-gcm is implemented as symmetric key decryption
-		const decipher: crypto.DecipherGCM = crypto.createDecipheriv(
-			ALGO,
-			scryptKey,
-			initializationVector,
-		);
-		decipher.setAuthTag(tag);
-		const firstChunk: Buffer = decipher.update(encryptedMnemonic);
-		const secondChunk: Buffer = decipher.final();
-		return Buffer.concat([firstChunk, secondChunk]).toString() as string;
+		const ec = new TextEncoder(); // utf-8 text to Uint8Array
+		const pw: Uint8Array = ec.encode(password);
+		const scryptKey: Uint8Array = await scrypt.scrypt(pw, salt, N, r, p, dkLen);
+
+		// aes-256-ctr is implemented as symmetric key decryption
+		const aesCtr = new CTR(scryptKey);
+		const decryptedVault: Uint8Array = aesCtr.decrypt(encryptedMnemonic);
+		return new TextDecoder().decode(decryptedVault);
 	};
 }
 
