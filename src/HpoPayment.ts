@@ -19,6 +19,11 @@ class HpoPayment {
 		);
 		return tx;
 	};
+	// Hpo(erc20) addresss to receive
+	static generateHpoAddress = async (privKey: string): Promise<string> => {
+		const signer = new ethers.Wallet(privKey);
+		return signer.address;
+	};
 }
 
 export default HpoPayment;
