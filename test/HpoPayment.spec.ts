@@ -20,3 +20,22 @@ describe('HPO payment test', () => {
 		assert.strictEqual(tx.to, '0x40CB4DA705a044016e66dB2E30AdE93EbFe4abD4');
 	});
 });
+
+describe('HPO address test', () => {
+	it('HPO address is ethereum address format', async () => {
+		// Given
+		const mnemonic: string = await hippocrat.BtcWallet.generateWalletMnemonic();
+		const btcAccountPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAccountFromMnemonic(mnemonic, 0);
+		const btcAddressPotential: hippocrat.BtcAccount =
+			await hippocrat.BtcWallet.getAddressFromAccount(btcAccountPotential, 0);
+		// When
+		const hpoAddress = await hippocrat.HpoPayment.generateHpoAddress(
+			btcAddressPotential.privateKey?.toString('hex') as string,
+		);
+		console.log(hpoAddress);
+		// then (this will fail as signer does not have either HPO or ethereum)
+		assert.strictEqual(hpoAddress.slice(0, 2), '0x');
+		assert.strictEqual(hpoAddress.length, 42);
+	});
+});
