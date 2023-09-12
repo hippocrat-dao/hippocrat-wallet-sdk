@@ -1,0 +1,16 @@
+.DS_Store
+**/coverage/
+**/test/
+node_modules/
+src/
+
+package-lock.json
+README.md
+tsconfig.base.json
+tsconfig.cjs.json
+tsconfig.esm.json
+.eslintignore
+.eslintrc.json
+.gitignore
+.prettierignore
+.prettierrc.json
