@@ -71,7 +71,7 @@
       }
     }
   },
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/cjs/index.cjs",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
   "sideEffects": false
