@@ -62,8 +62,8 @@
   "exports": {
     ".": {
       "require": {
-        "types": "./lib/cjs/index.d.ts",
-        "default": "./lib/cjs/index.js"
+        "types": "./lib/cjs/index.d.cts",
+        "default": "./lib/cjs/index.cjs"
       },
       "import": {
         "types": "./lib/esm/index.d.ts",
