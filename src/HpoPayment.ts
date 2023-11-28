@@ -20,10 +20,48 @@ class HpoPayment {
 		return tx;
 	};
 	// Hpo(erc20) addresss to receive
-	static generateHpoAddress = async (privKey: string): Promise<string> => {
-		const signer = new ethers.Wallet(privKey);
-		return signer.address;
+	static generateHpoAddress = async (publicKey: string): Promise<string> => {
+		return ethers.computeAddress('0x' + publicKey);
 	};
+	// get Hpo balance
+	static getHpoBalance = async (
+		address: string,
+		provider?: any, // if not provided, default provider is used
+	): Promise<string> => {
+		const rpcNode = provider
+			? provider
+			: ethers.getDefaultProvider('homestead');
+		const hpo = new ethers.Contract(HPO_ADDRESS, HPO_ABI, rpcNode);
+		return ethers.formatEther(await hpo.balanceOf(address));
+	};
+	// transfer HPO token
+	static transferEth = async (
+		privKey: string,
+		amount: number,
+		toAddress: string,
+		provider?: any, // if not provided, default provider is used
+	): Promise<any> => {
+		const rpcNode = provider
+			? provider
+			: ethers.getDefaultProvider('homestead');
+		const signer = new ethers.Wallet(privKey, rpcNode);
+		const tx: any = await signer.sendTransaction({
+			value: ethers.parseUnits(amount.toString()),
+			to: toAddress
+		})
+		return tx;
+	};
+	// get Eth balance
+	static getEthBalance = async (
+		address: string,
+		provider?: any, // if not provided, default provider is used
+	): Promise<string> => {
+		const rpcNode = provider
+			? provider
+			: ethers.getDefaultProvider('homestead');
+		return ethers.formatEther(await rpcNode.getBalance(address));
+	};
+
 }
 
 export default HpoPayment;
