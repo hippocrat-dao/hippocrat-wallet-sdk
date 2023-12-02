@@ -1,7 +1,7 @@
 {
   "name": "hippocrat-wallet-sdk",
   "type": "module",
-  "version": "0.0.1-beta",
+  "version": "0.0.2",
   "description": "Bitcoin, Hippocrat, DID and Data Wallet SDK for Node, Browser and Mobile",
   "repository": {
     "type": "git",
